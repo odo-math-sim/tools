@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>正弦定理と余弦定理の応用（p.159～160）</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#e2e8f0;color:#1e293b;
+    font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif}
+  .bar{position:sticky;top:0;z-index:10;background:#1e293b;color:#fff;padding:10px 16px;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+  .bar h1{margin:0 0 8px;font-size:1.15rem}
+  .nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .nav button{font:inherit;font-size:.85rem;border:none;border-radius:999px;padding:6px 12px;cursor:pointer;
+    background:#334155;color:#cbd5e1;font-weight:700;transition:.15s}
+  .nav button:hover{background:#475569;color:#fff}
+  .nav button.on{background:#facc15;color:#1e293b}
+  .nav .arrow{color:#64748b}
+  iframe{display:none;width:100%;border:none;min-height:900px;background:#f1f5f9}
+  iframe.on{display:block}
+  .pager{display:flex;justify-content:space-between;gap:8px;max-width:1200px;margin:0 auto;padding:12px 16px 28px}
+  .pager button{font:inherit;font-weight:700;border:none;border-radius:10px;padding:12px 18px;cursor:pointer;background:#1e293b;color:#fff}
+  .pager button:disabled{opacity:.3;cursor:not-allowed}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <h1>📘 正弦定理と余弦定理の応用（p.159～160）</h1>
+    <div class="nav" id="nav">
+      <button data-i="0">① 例題13</button><span class="arrow">→</span>
+      <button data-i="1">② 練習26</button><span class="arrow">→</span>
+      <button data-i="2">③ 応用例題1</button><span class="arrow">→</span>
+      <button data-i="3">④ 練習27（発見）</button><span class="arrow">→</span>
+      <button data-i="4">⑤ 練習27（解説）</button>
+    </div>
+  </div>
+
+  <iframe title="例題13" srcdoc="<!DOCTYPE html>
+<html lang=&quot;ja&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<title>三角形の決定 ― 2つの解が存在する場合</title>
+<meta name=&quot;description&quot; content=&quot;a=√6, b=2, ∠B=45° の三角形が2通り存在することを、点Aをドラッグして確かめる動的教材&quot;>
+<style>
+  :root{
+    --bg:#f1f5f9; --card:#fff; --ink:#1e293b; --muted:#64748b; --line:#e2e8f0;
+    --a:#2563eb; --b:#dc2626; --c:#16a34a; --p1:#4f46e5; --p2:#059669; --warn:#ea580c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:&quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,&quot;Meiryo&quot;,system-ui,sans-serif;line-height:1.6}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px}
+  header h1{margin:4px 0 2px;font-size:1.5rem}
+  header p{margin:0;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:12px}
+  @media(min-width:960px){.grid{grid-template-columns:3fr 2fr}}
+  .card{background:var(--card);border-radius:16px;box-shadow:0 4px 16px rgba(15,23,42,.08);padding:16px}
+  .problem{font-size:1.05rem;padding:12px 14px;background:#f8fafc;border-left:5px solid var(--a);border-radius:8px;margin-bottom:10px}
+  .ca{color:var(--a);font-weight:700}.cb{color:var(--b);font-weight:700}.cc{color:var(--c);font-weight:700}
+  canvas{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line);
+    background:#fff;touch-action:none;cursor:grab}
+  canvas.drag{cursor:grabbing}
+  .hint{font-size:.85rem;color:var(--muted);margin:8px 2px 0}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  button{font:inherit;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;color:#fff;transition:.15s}
+  button:hover{filter:brightness(1.1)} button:active{transform:scale(.97)}
+  .btn1{background:var(--p1)} .btn2{background:var(--p2)} .btn3{background:#475569} .btn4{background:#0ea5e9}
+  .toggles{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.9rem}
+  .toggles label{display:flex;gap:6px;align-items:center;cursor:pointer}
+  input[type=range]{width:100%;accent-color:var(--b);margin-top:8px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+  .stat{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center}
+  .stat small{display:block;color:var(--muted);font-size:.75rem}
+  .stat b{font-size:1.15rem}
+  .off{color:var(--warn)}
+  .msg{margin-top:10px;padding:10px;border-radius:10px;text-align:center;font-weight:700;display:none}
+  .msg.p1{display:block;background:#e0e7ff;color:#3730a3}
+  .msg.p2{display:block;background:#d1fae5;color:#065f46}
+  .msg.near{display:block;background:#fff7ed;color:#9a3412}
+  .tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+  .tab{background:#e2e8f0;color:var(--ink);padding:8px 12px;font-size:.9rem}
+  .tab.on{background:var(--ink);color:#fff}
+  .step{display:none;padding:10px 12px;border-left:4px solid var(--line);margin:8px 0;background:#f8fafc;border-radius:6px;animation:fade .35s}
+  .step.show{display:block}
+  .step h3{margin:0 0 4px;font-size:.95rem}
+  .math{font-family:&quot;Cambria Math&quot;,&quot;Times New Roman&quot;,serif;font-size:1.08rem}
+  .ans{border-left-color:var(--p1)} .ans2{border-left-color:var(--p2)}
+  .key{border-left-color:var(--warn);background:#fff7ed}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  .quiz .q{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+  .quiz input{width:80px;font:inherit;padding:4px 6px;border:1px solid #cbd5e1;border-radius:6px;text-align:right}
+  .quiz input:focus{outline:2px solid var(--a);border-color:transparent}
+  .quiz .unit{font-weight:700;margin-right:10px}
+  .quiz .r{font-weight:700;margin-left:6px}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+  <header>
+    <div style=&quot;display:inline-block;margin:2px 0 6px;padding:4px 12px;border-radius:999px;background:#fef3c7;color:#92400e;font-weight:700;font-size:.95rem;border:1px solid #fcd34d&quot;>&amp;#128214; 教科書：例題13（p.159）</div><h1>三角形の決定 ― 解が2つある場合</h1>
+    <p>点 A をドラッグして、条件を満たす三角形を探してみよう。</p>
+  </header>
+
+  <div class=&quot;grid&quot;>
+    <section class=&quot;card&quot;>
+      <div class=&quot;problem&quot;>
+        △ABC において <span class=&quot;ca&quot;>a = √6</span>，<span class=&quot;cb&quot;>b = 2</span>，<b>B = 45°</b> のとき，<span class=&quot;cc&quot;>c</span>，A，C を求めよ。
+      </div>
+      <canvas id=&quot;cv&quot; width=&quot;800&quot; height=&quot;520&quot; aria-label=&quot;三角形の図。点Aをドラッグできます&quot;></canvas>
+      <p class=&quot;hint&quot;>💡 赤い点 A をドラッグ（またはスライダー）。点 A は点 C を中心とする半径 b = 2 の円周上を動きます。</p>
+      <input type=&quot;range&quot; id=&quot;slider&quot; min=&quot;0&quot; max=&quot;360&quot; step=&quot;0.5&quot; value=&quot;270&quot; aria-label=&quot;辺bの向き&quot;>
+
+      <div class=&quot;stats&quot;>
+        <div class=&quot;stat&quot;><small>B（条件 45°）</small><b id=&quot;vB&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>A</small><b id=&quot;vA&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>C</small><b id=&quot;vC&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>c</small><b id=&quot;vc&quot;>--</b></div>
+      </div>
+      <div id=&quot;msg&quot; class=&quot;msg&quot;></div>
+
+      <div class=&quot;row&quot;>
+        <button class=&quot;btn1&quot; id=&quot;go1&quot;>解1へ移動（A₁）</button>
+        <button class=&quot;btn2&quot; id=&quot;go2&quot;>解2へ移動（A₂）</button>
+        <button class=&quot;btn4&quot; id=&quot;anim&quot;>▶ 自動で1周</button>
+        <button class=&quot;btn3&quot; id=&quot;reset&quot;>リセット</button>
+      </div>
+      <div class=&quot;toggles&quot;>
+        <label><input type=&quot;checkbox&quot; id=&quot;tCand&quot;> 答えの位置（A₁, A₂）を表示</label>
+        <label><input type=&quot;checkbox&quot; id=&quot;tH&quot;> C からの垂線（高さ）を表示</label>
+        <label><input type=&quot;checkbox&quot; id=&quot;tBoth&quot;> 2つの三角形を重ねて表示</label>
+      </div>
+    </section>
+
+    <section class=&quot;card&quot;>
+      <div class=&quot;tabs&quot;>
+        <button class=&quot;tab on&quot; data-t=&quot;quiz&quot;>① 自分で解く</button>
+        <button class=&quot;tab&quot; data-t=&quot;cos&quot;>② 余弦定理で</button>
+        <button class=&quot;tab&quot; data-t=&quot;sin&quot;>③ 正弦定理で</button>
+      </div>
+
+      <div id=&quot;p-quiz&quot; class=&quot;pane quiz&quot;>
+        <p>図で確かめる前に、答えを数値で入力してみよう（c は小数の近似値で OK）。</p>
+        <p class=&quot;q&quot;>解1：c ≈ <input id=&quot;q1&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;解1のc&quot;>
+          <span class=&quot;unit&quot;></span>A = <input id=&quot;q2&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;解1の角A&quot;><span class=&quot;unit&quot;>°</span>
+          <span class=&quot;r&quot; id=&quot;r1&quot;></span></p>
+        <p class=&quot;q&quot;>解2：c ≈ <input id=&quot;q3&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;解2のc&quot;>
+          <span class=&quot;unit&quot;></span>A = <input id=&quot;q4&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;解2の角A&quot;><span class=&quot;unit&quot;>°</span>
+          <span class=&quot;r&quot; id=&quot;r2&quot;></span></p>
+        <button class=&quot;btn1&quot; id=&quot;check&quot;>答え合わせ</button>
+        <div class=&quot;step key show&quot; style=&quot;margin-top:14px&quot;>
+          <h3>🔎 なぜ解が2つあるの？</h3>
+          C から底辺までの高さは <span class=&quot;math&quot;>h = a sin B = √6 · (√2/2) = √3 ≈ 1.73</span>。<br>
+          <span class=&quot;math&quot;>h &amp;lt; b &amp;lt; a</span>（1.73 &amp;lt; 2 &amp;lt; 2.45）なので，半径 b の円が底辺と<b>2点で交わる</b>。<br>
+          「C からの垂線」を表示して確かめよう。
+        </div>
+      </div>
+
+      <div id=&quot;p-cos&quot; class=&quot;pane&quot; style=&quot;display:none&quot;>
+        <div class=&quot;steps&quot; data-g=&quot;cos&quot;>
+          <div class=&quot;step show&quot;><h3>Step 1　余弦定理を立てる</h3>
+            <span class=&quot;math&quot;>b² = c² + a² − 2ca cos B</span></div>
+          <div class=&quot;step&quot;><h3>Step 2　値を代入</h3>
+            <span class=&quot;math&quot;>4 = c² + 6 − 2·c·√6·(√2/2)</span><br>
+            <span class=&quot;math&quot;>c² − 2√3 c + 2 = 0</span></div>
+          <div class=&quot;step&quot;><h3>Step 3　解の公式</h3>
+            <span class=&quot;math&quot;>c = √3 ± √(3 − 2) = √3 ± 1</span><br>どちらも正 → <b>両方とも三角形になる！</b></div>
+          <div class=&quot;step ans&quot;><h3>Step 4　c = √3 + 1 のとき</h3>
+            <span class=&quot;math&quot;>cos A = (b² + c² − a²) / 2bc = (2 + 2√3) / 4(√3 + 1) = 1/2</span><br>
+            → <b>A = 60°，C = 75°</b></div>
+          <div class=&quot;step ans2&quot;><h3>Step 5　c = √3 − 1 のとき</h3>
+            <span class=&quot;math&quot;>cos A = (2 − 2√3) / 4(√3 − 1) = −1/2</span><br>
+            → <b>A = 120°，C = 15°</b></div>
+        </div>
+        <div class=&quot;row&quot;><button class=&quot;btn3 next&quot; data-g=&quot;cos&quot;>次のステップ ▶</button></div>
+      </div>
+
+      <div id=&quot;p-sin&quot; class=&quot;pane&quot; style=&quot;display:none&quot;>
+        <div class=&quot;steps&quot; data-g=&quot;sin&quot;>
+          <div class=&quot;step show&quot;><h3>Step 1　正弦定理</h3>
+            <span class=&quot;math&quot;>a / sin A = b / sin B</span></div>
+          <div class=&quot;step&quot;><h3>Step 2　sin A を求める</h3>
+            <span class=&quot;math&quot;>sin A = a sin B / b = √6 · (√2/2) / 2 = √3/2</span></div>
+          <div class=&quot;step key&quot;><h3>Step 3　⚠ ここが落とし穴</h3>
+            0° &amp;lt; A &amp;lt; 135° の範囲で sin A = √3/2 となるのは<br>
+            <b>A = 60° と A = 120° の2つ</b>（どちらも A + B &amp;lt; 180° を満たす）</div>
+          <div class=&quot;step ans&quot;><h3>Step 4　A = 60° のとき</h3>
+            C = 75°，<span class=&quot;math&quot;>c = b sin C / sin B = √3 + 1</span></div>
+          <div class=&quot;step ans2&quot;><h3>Step 5　A = 120° のとき</h3>
+            C = 15°，<span class=&quot;math&quot;>c = b sin C / sin B = √3 − 1</span></div>
+        </div>
+        <div class=&quot;row&quot;><button class=&quot;btn3 next&quot; data-g=&quot;sin&quot;>次のステップ ▶</button></div>
+      </div>
+    </section>
+  </div>
+  <footer>数学Ⅰ 図形と計量 ― 三角形の決定（2つの解）</footer>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const cv = $('cv'), ctx = cv.getContext('2d'), slider = $('slider');
+  const W = 800, H = 520;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+
+  const S = 150, OX = 110, OY = 430;
+  const R3 = Math.sqrt(3);
+  const X = x => OX + x * S, Y = y => OY - y * S;
+  const Bp = {x:0, y:0}, Cp = {x:R3, y:R3}, RB = 2;
+  const SOL = [
+    {deg:300, x:R3+1, A:60,  C:75, c:'√3 + 1', col:'#4f46e5', bg:'rgba(79,70,229,.12)', name:'解1（鋭角三角形）'},
+    {deg:240, x:R3-1, A:120, C:15, c:'√3 − 1', col:'#059669', bg:'rgba(5,150,105,.14)', name:'解2（鈍角三角形）'}];
+  const SNAP = 2.5;
+
+  const posOf = deg => { const t = deg*Math.PI/180; return {x:Cp.x+RB*Math.cos(t), y:Cp.y+RB*Math.sin(t)}; };
+  const ang = (ux,uy,vx,vy) => Math.acos(Math.max(-1,Math.min(1,(ux*vx+uy*vy)/(Math.hypot(ux,uy)*Math.hypot(vx,vy)))))*180/Math.PI;
+
+  function line(p,q,col,w,dash){ctx.beginPath();ctx.setLineDash(dash||[]);ctx.moveTo(X(p.x),Y(p.y));ctx.lineTo(X(q.x),Y(q.y));
+    ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.stroke();ctx.setLineDash([]);}
+  function dot(p,col,r){ctx.beginPath();ctx.arc(X(p.x),Y(p.y),r,0,7);ctx.fillStyle=col;ctx.fill();}
+  function text(s,x,y,col,size,bold){ctx.font=`${bold?'bold ':''}${size}px &quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,Meiryo,sans-serif`;ctx.fillStyle=col;ctx.fillText(s,x,y);}
+  function tri(A,fill){ctx.beginPath();ctx.moveTo(X(0),Y(0));ctx.lineTo(X(Cp.x),Y(Cp.y));ctx.lineTo(X(A.x),Y(A.y));ctx.closePath();ctx.fillStyle=fill;ctx.fill();}
+
+  function draw(){
+    const deg = parseFloat(slider.value);
+    const A = posOf(deg);
+    const snapped = SOL.find(s => Math.abs(deg - s.deg) < 0.01);
+    ctx.clearRect(0,0,W,H);
+
+    ctx.strokeStyle='#f1f5f9';ctx.lineWidth=1;
+    for(let gx=OX%30;gx<W;gx+=30){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+    for(let gy=OY%30;gy<H;gy+=30){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+
+    line({x:-0.4,y:0},{x:4.6,y:0},'#94a3b8',2,[6,6]);
+    ctx.beginPath();ctx.setLineDash([6,6]);ctx.arc(X(Cp.x),Y(Cp.y),RB*S,0,7);ctx.strokeStyle='#fca5a5';ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);
+
+    if($('tBoth').checked){ SOL.forEach(s=>{const P={x:s.x,y:0};tri(P,s.bg);line(Cp,P,s.col,2,[4,4]);}); }
+    else if(snapped){ tri(A, snapped.bg); }
+
+    if($('tH').checked){
+      line(Cp,{x:R3,y:0},'#ea580c',2,[3,4]);
+      ctx.strokeStyle='#ea580c';ctx.lineWidth=1.5;ctx.strokeRect(X(R3),Y(0)-12,12,12);
+      text('h = √3',X(R3)+8,Y(R3/2),'#ea580c',16,true);
+    }
+    if($('tCand').checked || $('tBoth').checked){
+      SOL.forEach((s,i)=>{dot({x:s.x,y:0},s.col,7);text(i?'A₂':'A₁',X(s.x)-10,Y(0)+28,s.col,17,true);});
+    }
+
+    line(Bp,Cp,'#2563eb',4); line(Cp,A,'#dc2626',4); line(Bp,A,'#16a34a',4);
+    ctx.beginPath();ctx.arc(X(0),Y(0),38,0,-Math.PI/4,true);ctx.strokeStyle='#2563eb';ctx.lineWidth=2;ctx.stroke();
+    text('45°',X(0)+44,Y(0)-12,'#1e293b',15);
+
+    dot(Bp,'#1e293b',6); dot(Cp,'#1e293b',6);
+    ctx.beginPath();ctx.arc(X(A.x),Y(A.y),14,0,7);ctx.fillStyle='rgba(220,38,38,.18)';ctx.fill();
+    dot(A,'#dc2626',8);
+
+    text('B',X(0)-26,Y(0)+22,'#1e293b',22,true);
+    text('C',X(Cp.x)-8,Y(Cp.y)-16,'#1e293b',22,true);
+    text('A',X(A.x)+16,Y(A.y)-12,'#dc2626',22,true);
+    text('a = √6',X(Cp.x/2)-78,Y(Cp.y/2)-6,'#2563eb',17,true);
+    text('b = 2',X((Cp.x+A.x)/2)+14,Y((Cp.y+A.y)/2)+6,'#dc2626',17,true);
+    text('c',X(A.x/2)-4,Y(A.y/2)+(A.y<0.3?26:-10),'#16a34a',18,true);
+
+    update(A,deg,snapped);
+  }
+
+  function update(A,deg,s){
+    const vB=$('vB'),vA=$('vA'),vC=$('vC'),vc=$('vc'),msg=$('msg');
+    if(s){
+      vB.textContent='45°';vB.className='';vA.textContent=s.A+'°';vC.textContent=s.C+'°';vc.textContent=s.c;
+      msg.className='msg '+(s.deg===300?'p1':'p2');
+      msg.textContent=`🎉 ${s.name}：c = ${s.c}，A = ${s.A}°，C = ${s.C}°`;
+      return;
+    }
+    const c=Math.hypot(A.x,A.y);
+    if(c<1e-6){vB.textContent=vA.textContent=vC.textContent='--';vc.textContent='0';msg.className='msg';return;}
+    const b=ang(A.x,A.y,Cp.x,Cp.y);
+    vB.textContent=b.toFixed(1)+'°'; vB.className=Math.abs(b-45)<0.5?'':'off';
+    vA.textContent=ang(-A.x,-A.y,Cp.x-A.x,Cp.y-A.y).toFixed(1)+'°';
+    vC.textContent=ang(-Cp.x,-Cp.y,A.x-Cp.x,A.y-Cp.y).toFixed(1)+'°';
+    vc.textContent=c.toFixed(2);
+    const near=SOL.find(s=>Math.abs(deg-s.deg)<12);
+    if(near){ msg.className='msg near'; msg.textContent='もう少し！ A を底辺（点線）に乗せよう'; }
+    else msg.className='msg';
+  }
+
+  function setDeg(d){
+    d=((d%360)+360)%360;
+    const s=SOL.find(s=>Math.abs(d-s.deg)<SNAP);
+    slider.value = s ? s.deg : d;
+    draw();
+  }
+
+  // ---- ドラッグ ----
+  let dragging=false;
+  const toMath = e => { const r=cv.getBoundingClientRect(); const px=(e.clientX-r.left)*W/r.width, py=(e.clientY-r.top)*H/r.height;
+    return {x:(px-OX)/S, y:(OY-py)/S, px, py}; };
+  cv.addEventListener('pointerdown',e=>{
+    const m=toMath(e), A=posOf(+slider.value);
+    const dA=Math.hypot(m.px-X(A.x),m.py-Y(A.y));
+    const dCirc=Math.abs(Math.hypot(m.x-Cp.x,m.y-Cp.y)-RB)*S;
+    if(dA<30||dCirc<20){dragging=true;cv.classList.add('drag');cv.setPointerCapture(e.pointerId);stopAnim();move(e);}
+  });
+  const move=e=>{ if(!dragging)return; const m=toMath(e); setDeg(Math.atan2(m.y-Cp.y,m.x-Cp.x)*180/Math.PI); };
+  cv.addEventListener('pointermove',move);
+  const up=()=>{dragging=false;cv.classList.remove('drag');};
+  cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
+
+  slider.addEventListener('input',()=>{stopAnim();setDeg(+slider.value);});
+
+  // ---- アニメーション ----
+  let raf=null;
+  function stopAnim(){ if(raf){cancelAnimationFrame(raf);raf=null;} $('anim').textContent='▶ 自動で1周'; }
+  function tween(to){
+    stopAnim(); const from=+slider.value; const diff=((to-from+540)%360)-180; const t0=performance.now();
+    const step=t=>{const k=Math.min(1,(t-t0)/700), e=1-Math.pow(1-k,3);
+      slider.value=k===1?to:((from+diff*e)%360+360)%360; draw(); raf=k<1?requestAnimationFrame(step):null;};
+    raf=requestAnimationFrame(step);
+  }
+  $('go1').onclick=()=>tween(300);
+  $('go2').onclick=()=>tween(240);
+  $('reset').onclick=()=>{['tCand','tH','tBoth'].forEach(i=>$(i).checked=false);tween(270);};
+  $('anim').onclick=()=>{
+    if(raf){stopAnim();return;}
+    $('anim').textContent='⏸ 停止'; let last=performance.now(), pause=0;
+    const step=t=>{const dt=t-last;last=t;
+      if(pause>0){pause-=dt;} else {
+        const prev=+slider.value; let d=(prev+dt*0.03)%360;
+        const hit=SOL.find(s=>prev<s.deg&amp;&amp;d>=s.deg);
+        slider.value=hit?hit.deg:d; if(hit)pause=1500;
+      }
+      draw(); raf=requestAnimationFrame(step);};
+    raf=requestAnimationFrame(step);
+  };
+  ['tCand','tH','tBoth'].forEach(i=>$(i).addEventListener('change',draw));
+
+  // ---- タブ &amp; ステップ ----
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+    document.querySelectorAll('.pane').forEach(p=>p.style.display=p.id==='p-'+t.dataset.t?'block':'none');
+  });
+  document.querySelectorAll('.next').forEach(b=>b.onclick=()=>{
+    const steps=[...document.querySelectorAll(`.steps[data-g=&quot;${b.dataset.g}&quot;] .step`)];
+    const n=steps.find(s=>!s.classList.contains('show'));
+    if(!n){ steps.forEach((s,i)=>s.classList.toggle('show',i===0)); b.textContent='次のステップ ▶'; return; }
+    n.classList.add('show');
+    if(n.classList.contains('ans'))tween(300);
+    if(n.classList.contains('ans2'))tween(240);
+    if(steps.every(s=>s.classList.contains('show'))) b.textContent='最初から ↺';
+  });
+
+  // ---- 入力：数値のみ（全角数字も半角に変換） ----
+  ['q1','q2','q3','q4'].forEach(id=>{
+    const el=$(id);
+    el.addEventListener('input',()=>{
+      const v=el.value
+        .replace(/[０-９．]/g,ch=>String.fromCharCode(ch.charCodeAt(0)-0xFEE0))
+        .replace(/。/g,'.')
+        .replace(/[^\d.]/g,'')
+        .replace(/(\..*)\./g,'$1');
+      if(v!==el.value) el.value=v;
+    });
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter') $('check').click(); });
+  });
+
+  // ---- 答え合わせ ----
+  $('check').onclick=()=>{
+    const num=id=>parseFloat($(id).value);
+    const ok=(v,t,tol)=>Math.abs(v-t)<=tol;
+    const r1=ok(num('q1'),R3+1,0.05)&amp;&amp;ok(num('q2'),60,0.5);
+    const r2=ok(num('q3'),R3-1,0.05)&amp;&amp;ok(num('q4'),120,0.5);
+    $('r1').textContent=r1?'⭕ 正解':'❌'; $('r1').style.color=r1?'#059669':'#dc2626';
+    $('r2').textContent=r2?'⭕ 正解':'❌'; $('r2').style.color=r2?'#059669':'#dc2626';
+    if(r1&amp;&amp;r2){ $('tBoth').checked=true; draw(); }
+  };
+
+  draw();
+})();
+</script>
+</body>
+</html>
+"></iframe>
+  <iframe title="練習26" srcdoc="<!DOCTYPE html>
+<html lang=&quot;ja&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<title>三角形の決定 ― 2辺とその間の角</title>
+<meta name=&quot;description&quot; content=&quot;b=2, c=√6+√2, A=45° の三角形の a, B, C を、点Cを動かして確かめる動的教材&quot;>
+<style>
+  :root{
+    --bg:#f1f5f9; --card:#fff; --ink:#1e293b; --muted:#64748b; --line:#e2e8f0;
+    --a:#16a34a; --b:#dc2626; --c:#2563eb; --p1:#4f46e5; --p2:#059669; --warn:#ea580c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:&quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,&quot;Meiryo&quot;,system-ui,sans-serif;line-height:1.6}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px}
+  header h1{margin:4px 0 2px;font-size:1.5rem}
+  header p{margin:0;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:12px}
+  @media(min-width:960px){.grid{grid-template-columns:3fr 2fr}}
+  .card{background:var(--card);border-radius:16px;box-shadow:0 4px 16px rgba(15,23,42,.08);padding:16px}
+  .problem{font-size:1.05rem;padding:12px 14px;background:#f8fafc;border-left:5px solid var(--c);border-radius:8px;margin-bottom:10px}
+  .ca{color:var(--a);font-weight:700}.cb{color:var(--b);font-weight:700}.cc{color:var(--c);font-weight:700}
+  canvas{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line);
+    background:#fff;touch-action:none;cursor:grab}
+  canvas.drag{cursor:grabbing}
+  .hint{font-size:.85rem;color:var(--muted);margin:8px 2px 0}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  button{font:inherit;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;color:#fff;transition:.15s}
+  button:hover{filter:brightness(1.1)} button:active{transform:scale(.97)}
+  .btn1{background:var(--p1)} .btn3{background:#475569} .btn4{background:#0ea5e9}
+  .toggles{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.9rem}
+  .toggles label{display:flex;gap:6px;align-items:center;cursor:pointer}
+  input[type=range]{width:100%;accent-color:var(--b);margin-top:8px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+  .stat{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center}
+  .stat small{display:block;color:var(--muted);font-size:.75rem}
+  .stat b{font-size:1.15rem}
+  .off{color:var(--warn)}
+  .msg{margin-top:10px;padding:10px;border-radius:10px;text-align:center;font-weight:700;display:none}
+  .msg.p1{display:block;background:#e0e7ff;color:#3730a3}
+  .msg.near{display:block;background:#fff7ed;color:#9a3412}
+  .tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+  .tab{background:#e2e8f0;color:var(--ink);padding:8px 12px;font-size:.9rem}
+  .tab.on{background:var(--ink);color:#fff}
+  .step{display:none;padding:10px 12px;border-left:4px solid var(--line);margin:8px 0;background:#f8fafc;border-radius:6px;animation:fade .35s}
+  .step.show{display:block}
+  .step h3{margin:0 0 4px;font-size:.95rem}
+  .math{font-family:&quot;Cambria Math&quot;,&quot;Times New Roman&quot;,serif;font-size:1.08rem}
+  .ans{border-left-color:var(--p1)}
+  .key{border-left-color:var(--warn);background:#fff7ed}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  .quiz .q{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+  .quiz input{width:80px;font:inherit;padding:4px 6px;border:1px solid #cbd5e1;border-radius:6px;text-align:right}
+  .quiz input:focus{outline:2px solid var(--c);border-color:transparent}
+  .quiz .unit{font-weight:700;margin-right:10px}
+  .quiz .r{font-weight:700;margin-left:6px}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+  <header>
+    <div style=&quot;display:inline-block;margin:2px 0 6px;padding:4px 12px;border-radius:999px;background:#fef3c7;color:#92400e;font-weight:700;font-size:.95rem;border:1px solid #fcd34d&quot;>&amp;#128214; 教科書：練習26（p.159）</div><h1>三角形の決定 ― 2辺とその間の角</h1>
+    <p>点 C を動かして、条件を満たす三角形を見つけよう。</p>
+  </header>
+
+  <div class=&quot;grid&quot;>
+    <section class=&quot;card&quot;>
+      <div class=&quot;problem&quot;>
+        △ABC において <span class=&quot;cb&quot;>b = 2</span>，<span class=&quot;cc&quot;>c = √6 + √2</span>，<b>A = 45°</b> のとき，<span class=&quot;ca&quot;>a</span>，B，C を求めよ。
+      </div>
+      <canvas id=&quot;cv&quot; width=&quot;800&quot; height=&quot;480&quot; aria-label=&quot;三角形の図。点Cをドラッグできます&quot;></canvas>
+      <p class=&quot;hint&quot;>💡 赤い点 C をドラッグ（またはスライダー）。点 C は点 A を中心とする半径 b = 2 の円周上を動きます。</p>
+      <input type=&quot;range&quot; id=&quot;slider&quot; min=&quot;10&quot; max=&quot;170&quot; step=&quot;0.5&quot; value=&quot;90&quot; aria-label=&quot;角Aの大きさ&quot;>
+
+      <div class=&quot;stats&quot;>
+        <div class=&quot;stat&quot;><small>A（条件 45°）</small><b id=&quot;vA&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>B</small><b id=&quot;vB&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>C</small><b id=&quot;vC&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>a</small><b id=&quot;va&quot;>--</b></div>
+      </div>
+      <div id=&quot;msg&quot; class=&quot;msg&quot;></div>
+
+      <div class=&quot;row&quot;>
+        <button class=&quot;btn1&quot; id=&quot;go&quot;>答えの位置へ移動</button>
+        <button class=&quot;btn4&quot; id=&quot;anim&quot;>▶ 自動で動かす</button>
+        <button class=&quot;btn3&quot; id=&quot;reset&quot;>リセット</button>
+      </div>
+      <div class=&quot;toggles&quot;>
+        <label><input type=&quot;checkbox&quot; id=&quot;tCand&quot;> 答えの位置を表示</label>
+        <label><input type=&quot;checkbox&quot; id=&quot;tH&quot;> C から AB への垂線を表示</label>
+      </div>
+    </section>
+
+    <section class=&quot;card&quot;>
+      <div class=&quot;tabs&quot;>
+        <button class=&quot;tab on&quot; data-t=&quot;quiz&quot;>① 自分で解く</button>
+        <button class=&quot;tab&quot; data-t=&quot;cos&quot;>② 余弦定理で</button>
+        <button class=&quot;tab&quot; data-t=&quot;sin&quot;>③ 正弦定理で</button>
+      </div>
+
+      <div id=&quot;p-quiz&quot; class=&quot;pane quiz&quot;>
+        <p>図で確かめる前に、答えを数値で入力してみよう（a は小数の近似値で OK）。</p>
+        <p class=&quot;q&quot;>a ≈ <input id=&quot;q1&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;a&quot;><span class=&quot;unit&quot;></span></p>
+        <p class=&quot;q&quot;>B = <input id=&quot;q2&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;角B&quot;><span class=&quot;unit&quot;>°</span>
+          C = <input id=&quot;q3&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;角C&quot;><span class=&quot;unit&quot;>°</span>
+          <span class=&quot;r&quot; id=&quot;r1&quot;></span></p>
+        <button class=&quot;btn1&quot; id=&quot;check&quot;>答え合わせ</button>
+        <div class=&quot;step key show&quot; style=&quot;margin-top:14px&quot;>
+          <h3>🔎 三角形はいくつある？</h3>
+          2辺 b, c と<b>その間の角 A</b> が決まると，三角形は<b>ただ1つ</b>に決まる（合同条件と同じ）。<br>
+          点 C を動かしても，A = 45° になる位置は1か所だけ。
+        </div>
+        <div class=&quot;step key show&quot;>
+          <h3>📐 垂線を引いて考えると</h3>
+          C から AB に垂線 CH を引くと，<span class=&quot;math&quot;>CH = AH = √2</span>，<span class=&quot;math&quot;>HB = c − √2 = √6</span>。<br>
+          <span class=&quot;math&quot;>a = √(2 + 6) = 2√2</span>，<span class=&quot;math&quot;>tan B = √2/√6 = 1/√3</span> → B = 30°。<br>
+          「垂線を表示」で確かめよう。
+        </div>
+      </div>
+
+      <div id=&quot;p-cos&quot; class=&quot;pane&quot; style=&quot;display:none&quot;>
+        <div class=&quot;steps&quot; data-g=&quot;cos&quot;>
+          <div class=&quot;step show&quot;><h3>Step 1　余弦定理を立てる</h3>
+            <span class=&quot;math&quot;>a² = b² + c² − 2bc cos A</span></div>
+          <div class=&quot;step&quot;><h3>Step 2　値を代入</h3>
+            <span class=&quot;math&quot;>c² = (√6 + √2)² = 8 + 4√3</span><br>
+            <span class=&quot;math&quot;>2bc cos A = 2·2·(√6 + √2)·(√2/2) = 4√3 + 4</span></div>
+          <div class=&quot;step&quot;><h3>Step 3　a を求める</h3>
+            <span class=&quot;math&quot;>a² = 4 + (8 + 4√3) − (4√3 + 4) = 8</span><br>
+            a &amp;gt; 0 より <b>a = 2√2</b></div>
+          <div class=&quot;step&quot;><h3>Step 4　B を求める</h3>
+            <span class=&quot;math&quot;>cos B = (c² + a² − b²) / 2ca = (12 + 4√3) / 4√2(√6 + √2)</span><br>
+            <span class=&quot;math&quot;>= (3 + √3) / 2(√3 + 1) = √3/2</span> → <b>B = 30°</b></div>
+          <div class=&quot;step ans&quot;><h3>Step 5　C を求める</h3>
+            <span class=&quot;math&quot;>C = 180° − (45° + 30°)</span> → <b>C = 105°</b></div>
+        </div>
+        <div class=&quot;row&quot;><button class=&quot;btn3 next&quot; data-g=&quot;cos&quot;>次のステップ ▶</button></div>
+      </div>
+
+      <div id=&quot;p-sin&quot; class=&quot;pane&quot; style=&quot;display:none&quot;>
+        <div class=&quot;steps&quot; data-g=&quot;sin&quot;>
+          <div class=&quot;step show&quot;><h3>Step 1　まず a を求める</h3>
+            余弦定理から <b>a = 2√2</b>（②を参照）</div>
+          <div class=&quot;step&quot;><h3>Step 2　正弦定理</h3>
+            <span class=&quot;math&quot;>b / sin B = a / sin A</span><br>
+            <span class=&quot;math&quot;>sin B = b sin A / a = 2·(√2/2) / 2√2 = 1/2</span></div>
+          <div class=&quot;step key&quot;><h3>Step 3　⚠ ここが落とし穴</h3>
+            sin B = 1/2 となるのは B = 30° と B = 150°。<br>
+            しかし B = 150° だと <span class=&quot;math&quot;>A + B = 195° &amp;gt; 180°</span> となり<b>不適</b>。</div>
+          <div class=&quot;step ans&quot;><h3>Step 4　答え</h3>
+            <b>B = 30°，C = 105°</b></div>
+        </div>
+        <div class=&quot;row&quot;><button class=&quot;btn3 next&quot; data-g=&quot;sin&quot;>次のステップ ▶</button></div>
+      </div>
+    </section>
+  </div>
+  <footer>数学Ⅰ 図形と計量 ― 三角形の決定（2辺とその間の角）</footer>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const cv = $('cv'), ctx = cv.getContext('2d'), slider = $('slider');
+  const W = 800, H = 480;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+
+  const S = 150, OX = 140, OY = 400;
+  const R2 = Math.SQRT2, R6 = Math.sqrt(6);
+  const CLEN = R6 + R2, RB = 2, TARGET = 45, SNAP = 2.5;
+  const X = x => OX + x * S, Y = y => OY - y * S;
+  const Ap = {x:0, y:0}, Bp = {x:CLEN, y:0};
+
+  const posOf = deg => { const t = deg*Math.PI/180; return {x:RB*Math.cos(t), y:RB*Math.sin(t)}; };
+  const ang = (ux,uy,vx,vy) => Math.acos(Math.max(-1,Math.min(1,(ux*vx+uy*vy)/(Math.hypot(ux,uy)*Math.hypot(vx,vy)))))*180/Math.PI;
+
+  function line(p,q,col,w,dash){ctx.beginPath();ctx.setLineDash(dash||[]);ctx.moveTo(X(p.x),Y(p.y));ctx.lineTo(X(q.x),Y(q.y));
+    ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.stroke();ctx.setLineDash([]);}
+  function dot(p,col,r){ctx.beginPath();ctx.arc(X(p.x),Y(p.y),r,0,7);ctx.fillStyle=col;ctx.fill();}
+  function text(s,x,y,col,size,bold){ctx.font=`${bold?'bold ':''}${size}px &quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,Meiryo,sans-serif`;ctx.fillStyle=col;ctx.fillText(s,x,y);}
+
+  function draw(){
+    const deg = parseFloat(slider.value);
+    const C = posOf(deg);
+    const snapped = Math.abs(deg - TARGET) < 0.01;
+    ctx.clearRect(0,0,W,H);
+
+    ctx.strokeStyle='#f1f5f9';ctx.lineWidth=1;
+    for(let gx=OX%30;gx<W;gx+=30){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+    for(let gy=OY%30;gy<H;gy+=30){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+
+    // C の軌跡（A 中心・半径 2）
+    ctx.beginPath();ctx.setLineDash([6,6]);ctx.arc(X(0),Y(0),RB*S,0,-Math.PI,true);
+    ctx.strokeStyle='#fca5a5';ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);
+
+    if(snapped){
+      ctx.beginPath();ctx.moveTo(X(0),Y(0));ctx.lineTo(X(Bp.x),Y(0));ctx.lineTo(X(C.x),Y(C.y));ctx.closePath();
+      ctx.fillStyle='rgba(79,70,229,.12)';ctx.fill();
+    }
+    if($('tCand').checked){
+      const T=posOf(TARGET); dot(T,'#4f46e5',7); text('答え',X(T.x)-20,Y(T.y)-14,'#4f46e5',15,true);
+    }
+    if($('tH').checked){
+      const F={x:C.x,y:0}; line(C,F,'#ea580c',2,[3,4]);
+      const s = C.x<=Bp.x ? 1 : -1;
+      ctx.strokeStyle='#ea580c';ctx.lineWidth=1.5;ctx.strokeRect(X(F.x)+(s>0?0:-12),Y(0)-12,12,12);
+      text('H',X(F.x)-6,Y(0)+24,'#ea580c',17,true);
+      if(snapped){ text('√2',X(F.x)+6,Y(C.y/2),'#ea580c',16,true);
+        text('√2',X(F.x/2)-10,Y(0)+24,'#ea580c',15,true);
+        text('√6',X((F.x+Bp.x)/2)-10,Y(0)+24,'#ea580c',15,true); }
+    }
+
+    line(Ap,Bp,'#2563eb',4); line(Ap,C,'#dc2626',4); line(Bp,C,'#16a34a',4);
+    // A の角
+    ctx.beginPath();ctx.arc(X(0),Y(0),36,0,-deg*Math.PI/180,true);
+    ctx.strokeStyle=snapped?'#4f46e5':'#94a3b8';ctx.lineWidth=2;ctx.stroke();
+    text(deg.toFixed(deg%1?1:0)+'°',X(0)+40,Y(0)-12,snapped?'#4f46e5':'#1e293b',15,snapped);
+
+    dot(Ap,'#1e293b',6); dot(Bp,'#1e293b',6);
+    ctx.beginPath();ctx.arc(X(C.x),Y(C.y),14,0,7);ctx.fillStyle='rgba(220,38,38,.18)';ctx.fill();
+    dot(C,'#dc2626',8);
+
+    text('A',X(0)-26,Y(0)+22,'#1e293b',22,true);
+    text('B',X(Bp.x)+10,Y(0)+22,'#1e293b',22,true);
+    text('C',X(C.x)-8,Y(C.y)-18,'#dc2626',22,true);
+    text('c = √6 + √2',X(CLEN/2)-50,Y(0)+($('tH').checked?48:28),'#2563eb',17,true);
+    text('b = 2',X(C.x/2)-62,Y(C.y/2)-4,'#dc2626',17,true);
+    text(snapped?'a = 2√2':'a',X((C.x+Bp.x)/2)+12,Y(C.y/2)-6,'#16a34a',18,true);
+
+    update(C,deg,snapped);
+  }
+
+  function update(C,deg,s){
+    const vA=$('vA'),vB=$('vB'),vC=$('vC'),va=$('va'),msg=$('msg');
+    if(s){
+      vA.textContent='45°';vA.className='';vB.textContent='30°';vC.textContent='105°';va.textContent='2√2';
+      msg.className='msg p1'; msg.textContent='🎉 条件を満たしました：a = 2√2，B = 30°，C = 105°';
+      return;
+    }
+    vA.textContent=deg.toFixed(1)+'°'; vA.className='off';
+    vB.textContent=ang(-Bp.x,0,C.x-Bp.x,C.y).toFixed(1)+'°';
+    vC.textContent=ang(-C.x,-C.y,Bp.x-C.x,-C.y).toFixed(1)+'°';
+    va.textContent=Math.hypot(Bp.x-C.x,C.y).toFixed(2);
+    if(Math.abs(deg-TARGET)<12){ msg.className='msg near'; msg.textContent='もう少し！ A = 45° にしよう'; }
+    else msg.className='msg';
+  }
+
+  function setDeg(d){
+    d=Math.max(10,Math.min(170,d));
+    slider.value = Math.abs(d-TARGET)<SNAP ? TARGET : d;
+    draw();
+  }
+
+  // ---- ドラッグ ----
+  let dragging=false;
+  const toMath = e => { const r=cv.getBoundingClientRect(); const px=(e.clientX-r.left)*W/r.width, py=(e.clientY-r.top)*H/r.height;
+    return {x:(px-OX)/S, y:(OY-py)/S, px, py}; };
+  cv.addEventListener('pointerdown',e=>{
+    const m=toMath(e), C=posOf(+slider.value);
+    const dC=Math.hypot(m.px-X(C.x),m.py-Y(C.y));
+    const dCirc=Math.abs(Math.hypot(m.x,m.y)-RB)*S;
+    if(dC<30||(dCirc<20&amp;&amp;m.y>0)){dragging=true;cv.classList.add('drag');cv.setPointerCapture(e.pointerId);stopAnim();move(e);}
+  });
+  const move=e=>{ if(!dragging)return; const m=toMath(e); let d=Math.atan2(m.y,m.x)*180/Math.PI; if(d<0)d=d<-90?170:10; setDeg(d); };
+  cv.addEventListener('pointermove',move);
+  const up=()=>{dragging=false;cv.classList.remove('drag');};
+  cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
+
+  slider.addEventListener('input',()=>{stopAnim();setDeg(+slider.value);});
+
+  // ---- アニメーション ----
+  let raf=null;
+  function stopAnim(){ if(raf){cancelAnimationFrame(raf);raf=null;} $('anim').textContent='▶ 自動で動かす'; }
+  function tween(to){
+    stopAnim(); const from=+slider.value; const t0=performance.now();
+    const step=t=>{const k=Math.min(1,(t-t0)/700), e=1-Math.pow(1-k,3);
+      slider.value=k===1?to:from+(to-from)*e; draw(); raf=k<1?requestAnimationFrame(step):null;};
+    raf=requestAnimationFrame(step);
+  }
+  $('go').onclick=()=>tween(TARGET);
+  $('reset').onclick=()=>{['tCand','tH'].forEach(i=>$(i).checked=false);tween(90);};
+  $('anim').onclick=()=>{
+    if(raf){stopAnim();return;}
+    $('anim').textContent='⏸ 停止'; let last=performance.now(), pause=0, dir=1;
+    const step=t=>{const dt=t-last;last=t;
+      if(pause>0){pause-=dt;} else {
+        const prev=+slider.value; let d=prev+dir*dt*0.03;
+        if(d>=170){d=170;dir=-1;} if(d<=10){d=10;dir=1;}
+        const hit=(prev-TARGET)*(d-TARGET)<=0 &amp;&amp; prev!==TARGET;
+        slider.value=hit?TARGET:d; if(hit)pause=1500;
+      }
+      draw(); raf=requestAnimationFrame(step);};
+    raf=requestAnimationFrame(step);
+  };
+  ['tCand','tH'].forEach(i=>$(i).addEventListener('change',draw));
+
+  // ---- タブ &amp; ステップ ----
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+    document.querySelectorAll('.pane').forEach(p=>p.style.display=p.id==='p-'+t.dataset.t?'block':'none');
+  });
+  document.querySelectorAll('.next').forEach(b=>b.onclick=()=>{
+    const steps=[...document.querySelectorAll(`.steps[data-g=&quot;${b.dataset.g}&quot;] .step`)];
+    const n=steps.find(s=>!s.classList.contains('show'));
+    if(!n){ steps.forEach((s,i)=>s.classList.toggle('show',i===0)); b.textContent='次のステップ ▶'; return; }
+    n.classList.add('show');
+    if(n.classList.contains('ans'))tween(TARGET);
+    if(steps.every(s=>s.classList.contains('show'))) b.textContent='最初から ↺';
+  });
+
+  // ---- 入力：数値のみ（全角数字も半角に変換） ----
+  ['q1','q2','q3'].forEach(id=>{
+    const el=$(id);
+    el.addEventListener('input',()=>{
+      const v=el.value
+        .replace(/[０-９．]/g,ch=>String.fromCharCode(ch.charCodeAt(0)-0xFEE0))
+        .replace(/。/g,'.')
+        .replace(/[^\d.]/g,'')
+        .replace(/(\..*)\./g,'$1');
+      if(v!==el.value) el.value=v;
+    });
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter') $('check').click(); });
+  });
+
+  // ---- 答え合わせ ----
+  $('check').onclick=()=>{
+    const num=id=>parseFloat($(id).value);
+    const ok=(v,t,tol)=>Math.abs(v-t)<=tol;
+    const r=ok(num('q1'),2*R2,0.05)&amp;&amp;ok(num('q2'),30,0.5)&amp;&amp;ok(num('q3'),105,0.5);
+    $('r1').textContent=r?'⭕ 正解':'❌ もう一度'; $('r1').style.color=r?'#059669':'#dc2626';
+    if(r) tween(TARGET);
+  };
+
+  draw();
+})();
+</script>
+</body>
+</html>
+"></iframe>
+  <iframe title="応用例題1" srcdoc="<!DOCTYPE html>
+<html lang=&quot;ja&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<title>発見しよう！三角形はいくつできる？</title>
+<meta name=&quot;description&quot; content=&quot;a=√6, b=2, B=45° の三角形を自分で探し、2つの解を発見・比較する動的教材&quot;>
+<style>
+  :root{
+    --bg:#f1f5f9; --card:#fff; --ink:#1e293b; --muted:#64748b; --line:#e2e8f0;
+    --a:#2563eb; --b:#dc2626; --c:#16a34a; --p1:#4f46e5; --p2:#059669; --warn:#ea580c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:&quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,&quot;Meiryo&quot;,system-ui,sans-serif;line-height:1.6}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px}
+  header h1{margin:4px 0 2px;font-size:1.5rem}
+  header p{margin:0;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:12px}
+  @media(min-width:960px){.grid{grid-template-columns:3fr 2fr}}
+  .card{background:var(--card);border-radius:16px;box-shadow:0 4px 16px rgba(15,23,42,.08);padding:16px}
+  .problem{font-size:1.05rem;padding:12px 14px;background:#f8fafc;border-left:5px solid var(--a);border-radius:8px;margin-bottom:10px}
+  .ca{color:var(--a);font-weight:700}.cb{color:var(--b);font-weight:700}.cc{color:var(--c);font-weight:700}
+  canvas{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line);
+    background:#fff;touch-action:none;cursor:grab}
+  canvas.drag{cursor:grabbing}
+  .hint{font-size:.85rem;color:var(--muted);margin:8px 2px 0}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  button{font:inherit;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;color:#fff;transition:.15s}
+  button:hover{filter:brightness(1.1)} button:active{transform:scale(.97)}
+  button:disabled{opacity:.4;cursor:not-allowed;filter:none}
+  .btn1{background:var(--p1)} .btn3{background:#475569} .btn5{background:var(--warn)}
+  .pred button{background:#e2e8f0;color:var(--ink)}
+  .pred button.on{background:var(--ink);color:#fff}
+  input[type=range]{width:100%;accent-color:var(--b);margin-top:8px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+  .stat{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center}
+  .stat small{display:block;color:var(--muted);font-size:.75rem}
+  .stat b{font-size:1.15rem}
+  .off{color:var(--warn)}
+  .msg{margin-top:10px;padding:10px;border-radius:10px;text-align:center;font-weight:700;display:none}
+  .msg.p1{display:block;background:#e0e7ff;color:#3730a3}
+  .msg.p2{display:block;background:#d1fae5;color:#065f46}
+  .msg.near{display:block;background:#fff7ed;color:#9a3412}
+  h2{font-size:1.05rem;margin:0 0 8px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+  .block{margin-bottom:16px}
+  .note{display:grid;gap:8px}
+  .found{border-radius:10px;padding:10px 12px;border:2px dashed #cbd5e1;color:var(--muted);text-align:center}
+  .found.ok1{border:2px solid var(--p1);background:#eef2ff;color:var(--ink);text-align:left;animation:pop .4s}
+  .found.ok2{border:2px solid var(--p2);background:#ecfdf5;color:var(--ink);text-align:left;animation:pop .4s}
+  @keyframes pop{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}
+  .hidden{display:none}
+  .box{padding:10px 12px;border-left:4px solid var(--line);margin:8px 0;background:#f8fafc;border-radius:6px}
+  .key{border-left-color:var(--warn);background:#fff7ed}
+  .step{display:none;padding:10px 12px;border-left:4px solid var(--line);margin:8px 0;background:#f8fafc;border-radius:6px;animation:fade .35s}
+  .step.show{display:block}
+  .step h3,.box h3{margin:0 0 4px;font-size:.95rem}
+  .ans{border-left-color:var(--p1)} .ans2{border-left-color:var(--p2)}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  .math{font-family:&quot;Cambria Math&quot;,&quot;Times New Roman&quot;,serif;font-size:1.08rem}
+  table{width:100%;border-collapse:collapse;font-size:.95rem}
+  th,td{border:1px solid var(--line);padding:6px;text-align:center}
+  th{background:#f8fafc}
+  .t1{color:var(--p1);font-weight:700}.t2{color:var(--p2);font-weight:700}
+  .toggles{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.9rem}
+  .toggles label{display:flex;gap:6px;align-items:center;cursor:pointer}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+  <header>
+    <div style=&quot;display:inline-block;margin:2px 0 6px;padding:4px 12px;border-radius:999px;background:#fef3c7;color:#92400e;font-weight:700;font-size:.95rem;border:1px solid #fcd34d&quot;>&amp;#128214; 教科書：応用例題1（p.160）</div><h1>発見しよう！ 条件を満たす三角形はいくつできる？</h1>
+    <p>点 A を動かして、条件を満たす三角形をすべて見つけよう。</p>
+  </header>
+
+  <div class=&quot;grid&quot;>
+    <section class=&quot;card&quot;>
+      <div class=&quot;problem&quot;>
+        △ABC において <span class=&quot;ca&quot;>a = √6</span>，<span class=&quot;cb&quot;>b = 2</span>，<b>B = 45°</b> のとき，<span class=&quot;cc&quot;>c</span>，A，C を求めよ。
+      </div>
+      <canvas id=&quot;cv&quot; width=&quot;800&quot; height=&quot;520&quot; aria-label=&quot;三角形の図。点Aをドラッグできます&quot;></canvas>
+      <p class=&quot;hint&quot;>💡 赤い点 A をドラッグ（またはスライダー）。点 A は点 C から距離 2（= b）を保って動きます。<br>
+        B = 45° になるのは，点 A がどこにあるとき？</p>
+      <input type=&quot;range&quot; id=&quot;slider&quot; min=&quot;0&quot; max=&quot;360&quot; step=&quot;0.5&quot; value=&quot;0&quot; aria-label=&quot;辺bの向き&quot;>
+
+      <div class=&quot;stats&quot;>
+        <div class=&quot;stat&quot;><small>B（条件 45°）</small><b id=&quot;vB&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>A</small><b id=&quot;vA&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>C</small><b id=&quot;vC&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>c</small><b id=&quot;vc&quot;>--</b></div>
+      </div>
+      <div id=&quot;msg&quot; class=&quot;msg&quot;></div>
+
+      <div class=&quot;row&quot;>
+        <button class=&quot;btn5&quot; id=&quot;hintBtn&quot;>💡 ヒント（1/3）</button>
+        <button class=&quot;btn3&quot; id=&quot;reset&quot;>はじめから</button>
+      </div>
+      <div class=&quot;toggles hidden&quot; id=&quot;cmpToggles&quot;>
+        <label><input type=&quot;checkbox&quot; id=&quot;tBoth&quot;> 見つけた2つの三角形を重ねて表示</label>
+        <label><input type=&quot;checkbox&quot; id=&quot;tH&quot;> 点 C からの垂線（高さ）を表示</label>
+      </div>
+    </section>
+
+    <section class=&quot;card&quot;>
+      <!-- STEP1 予想 -->
+      <div class=&quot;block&quot;>
+        <h2>STEP 1　予想しよう</h2>
+        <p style=&quot;margin:0 0 6px&quot;>条件を満たす三角形は，いくつできると思う？</p>
+        <div class=&quot;row pred&quot; id=&quot;pred&quot; style=&quot;margin-top:0&quot;>
+          <button data-v=&quot;0&quot;>0 個</button><button data-v=&quot;1&quot;>1 個</button>
+          <button data-v=&quot;2&quot;>2 個</button><button data-v=&quot;3&quot;>3 個以上</button>
+        </div>
+      </div>
+
+      <!-- STEP2 発見ノート -->
+      <div class=&quot;block&quot;>
+        <h2>STEP 2　発見ノート <small style=&quot;color:var(--muted);font-weight:400&quot;>（見つけた数：<b id=&quot;count&quot;>0</b> 個）</small></h2>
+        <div class=&quot;note&quot;>
+          <div class=&quot;found&quot; id=&quot;f1&quot;>まだ見つかっていません</div>
+          <div class=&quot;found hidden&quot; id=&quot;f2&quot;>？？？</div>
+        </div>
+        <div id=&quot;hintArea&quot;></div>
+      </div>
+
+      <!-- STEP3 比較（2つ見つけたら表示） -->
+      <div class=&quot;block hidden&quot; id=&quot;cmp&quot;>
+        <h2>STEP 3　2つの三角形を比べよう</h2>
+        <p id=&quot;predResult&quot; style=&quot;font-weight:700;margin:4px 0 8px&quot;></p>
+        <table>
+          <tr><th></th><th class=&quot;t1&quot;>三角形 ①</th><th class=&quot;t2&quot;>三角形 ②</th></tr>
+          <tr><th>a, b, B</th><td colspan=&quot;2&quot;>√6，2，45°（共通）</td></tr>
+          <tr><th>c</th><td class=&quot;t1&quot;>√3 + 1</td><td class=&quot;t2&quot;>√3 − 1</td></tr>
+          <tr><th>A</th><td class=&quot;t1&quot;>60°</td><td class=&quot;t2&quot;>120°</td></tr>
+          <tr><th>C</th><td class=&quot;t1&quot;>75°</td><td class=&quot;t2&quot;>15°</td></tr>
+          <tr><th>形</th><td class=&quot;t1&quot;>鋭角三角形</td><td class=&quot;t2&quot;>鈍角三角形</td></tr>
+        </table>
+        <div class=&quot;box key&quot;>
+          <h3>🔎 気づいたことは？</h3>
+          ・2つの A を足すと <span class=&quot;math&quot;>60° + 120° = 180°</span>（sin A の値が同じ！）<br>
+          ・高さ <span class=&quot;math&quot;>h = a sin B = √3</span> と比べると <span class=&quot;math&quot;>h &amp;lt; b &amp;lt; a</span> → 円が直線と 2点で交わる
+        </div>
+      </div>
+
+      <!-- STEP4 計算で確かめる -->
+      <div class=&quot;block hidden&quot; id=&quot;calc&quot;>
+        <h2>STEP 4　計算で確かめよう（場合分け）</h2>
+        <div class=&quot;steps&quot; data-g=&quot;cos&quot;>
+          <div class=&quot;step show&quot;><h3>① 余弦定理で c の方程式をつくる</h3>
+            <span class=&quot;math&quot;>b² = c² + a² − 2ca cos B</span><br>
+            <span class=&quot;math&quot;>4 = c² + 6 − 2·c·√6·(√2/2)</span></div>
+          <div class=&quot;step&quot;><h3>② c の2次方程式</h3>
+            <span class=&quot;math&quot;>c² − 2√3 c + 2 = 0</span></div>
+          <div class=&quot;step key&quot;><h3>③ 解が2つ → 場合分けが必要！</h3>
+            <span class=&quot;math&quot;>c = √3 ± 1</span>（どちらも正なので両方とも適する）<br>
+            → 図で見つけた 2つの三角形と一致！</div>
+          <div class=&quot;step ans&quot;><h3>(i) c = √3 + 1 のとき</h3>
+            <span class=&quot;math&quot;>cos A = (b² + c² − a²) / 2bc = 1/2</span> → <b>A = 60°，C = 75°</b></div>
+          <div class=&quot;step ans2&quot;><h3>(ii) c = √3 − 1 のとき</h3>
+            <span class=&quot;math&quot;>cos A = (b² + c² − a²) / 2bc = −1/2</span> → <b>A = 120°，C = 15°</b></div>
+        </div>
+        <div class=&quot;row&quot;><button class=&quot;btn3 next&quot; data-g=&quot;cos&quot;>次のステップ ▶</button></div>
+      </div>
+    </section>
+  </div>
+  <footer>数学Ⅰ 図形と計量 ― 三角形の決定（2つの解の発見）</footer>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const cv = $('cv'), ctx = cv.getContext('2d'), slider = $('slider');
+  const W = 800, H = 520;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+
+  const S = 150, OX = 110, OY = 430;
+  const R3 = Math.sqrt(3);
+  const X = x => OX + x * S, Y = y => OY - y * S;
+  const Bp = {x:0, y:0}, Cp = {x:R3, y:R3}, RB = 2;
+  const SOL = [
+    {deg:300, x:R3+1, A:60,  C:75, c:'√3 + 1', approx:'2.73', col:'#4f46e5', bg:'rgba(79,70,229,.13)', cls:'ok1', shape:'鋭角三角形'},
+    {deg:240, x:R3-1, A:120, C:15, c:'√3 − 1', approx:'0.73', col:'#059669', bg:'rgba(5,150,105,.15)', cls:'ok2', shape:'鈍角三角形'}];
+  const SNAP = 2.5;
+
+  let found = [];      // 見つけた順に SOL のインデックス
+  let hintLv = 0;      // 0..3
+  let trail = [];      // 点 A の足跡
+
+  const posOf = deg => { const t = deg*Math.PI/180; return {x:Cp.x+RB*Math.cos(t), y:Cp.y+RB*Math.sin(t)}; };
+  const ang = (ux,uy,vx,vy) => Math.acos(Math.max(-1,Math.min(1,(ux*vx+uy*vy)/(Math.hypot(ux,uy)*Math.hypot(vx,vy)))))*180/Math.PI;
+
+  function line(p,q,col,w,dash){ctx.beginPath();ctx.setLineDash(dash||[]);ctx.moveTo(X(p.x),Y(p.y));ctx.lineTo(X(q.x),Y(q.y));
+    ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.stroke();ctx.setLineDash([]);}
+  function dot(p,col,r){ctx.beginPath();ctx.arc(X(p.x),Y(p.y),r,0,7);ctx.fillStyle=col;ctx.fill();}
+  function text(s,x,y,col,size,bold){ctx.font=`${bold?'bold ':''}${size}px &quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,Meiryo,sans-serif`;ctx.fillStyle=col;ctx.fillText(s,x,y);}
+  function tri(A,fill){ctx.beginPath();ctx.moveTo(X(0),Y(0));ctx.lineTo(X(Cp.x),Y(Cp.y));ctx.lineTo(X(A.x),Y(A.y));ctx.closePath();ctx.fillStyle=fill;ctx.fill();}
+
+  function draw(){
+    const deg = parseFloat(slider.value);
+    const A = posOf(deg);
+    const si = SOL.findIndex(s => Math.abs(deg - s.deg) < 0.01);
+    ctx.clearRect(0,0,W,H);
+
+    ctx.strokeStyle='#f1f5f9';ctx.lineWidth=1;
+    for(let gx=OX%30;gx<W;gx+=30){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+    for(let gy=OY%30;gy<H;gy+=30){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+
+    // B から 45° の方向に伸びる直線（ヒント1で強調）
+    line({x:-0.4,y:0},{x:4.6,y:0}, hintLv>=1?'#f59e0b':'#cbd5e1', hintLv>=1?3:2,[6,6]);
+    if(hintLv>=1) text('B = 45° を保つには，A はこの直線上',X(2.3),Y(0)+44,'#b45309',15,true);
+
+    // 点 A の足跡
+    ctx.fillStyle='rgba(220,38,38,.25)';
+    trail.forEach(p=>{ctx.beginPath();ctx.arc(X(p.x),Y(p.y),2,0,7);ctx.fill();});
+
+    // 円（ヒント2で表示）
+    if(hintLv>=2){
+      ctx.beginPath();ctx.setLineDash([6,6]);ctx.arc(X(Cp.x),Y(Cp.y),RB*S,0,7);
+      ctx.strokeStyle='#f87171';ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);
+    }
+    // 垂線（ヒント3 または比較時）
+    if(hintLv>=3 || $('tH').checked){
+      line(Cp,{x:R3,y:0},'#ea580c',2,[3,4]);
+      ctx.strokeStyle='#ea580c';ctx.lineWidth=1.5;ctx.strokeRect(X(R3),Y(0)-12,12,12);
+      text('h = √3',X(R3)+8,Y(R3/2),'#ea580c',16,true);
+    }
+
+    // 発見済みの位置
+    found.forEach(i=>{const s=SOL[i];dot({x:s.x,y:0},s.col,7);
+      text(i===found[0]?'①':'②',X(s.x)-8,Y(0)+26,s.col,18,true);});
+
+    if($('tBoth').checked){ found.forEach(i=>{const s=SOL[i],P={x:s.x,y:0};tri(P,s.bg);line(Cp,P,s.col,2,[4,4]);line(Bp,P,s.col,2,[4,4]);}); }
+    else if(si>=0){ tri(A, SOL[si].bg); }
+
+    line(Bp,Cp,'#2563eb',4); line(Cp,A,'#dc2626',4); line(Bp,A,'#16a34a',4);
+    // B の角（現在の角）
+    const bNow = ang(A.x,A.y,Cp.x,Cp.y);
+    const aStart = -Math.atan2(A.y,A.x), aEnd = -Math.PI/4;
+    ctx.beginPath();ctx.arc(X(0),Y(0),38,Math.min(aStart,aEnd),Math.max(aStart,aEnd));
+    ctx.strokeStyle=si>=0?'#4f46e5':'#94a3b8';ctx.lineWidth=2;ctx.stroke();
+
+    dot(Bp,'#1e293b',6); dot(Cp,'#1e293b',6);
+    ctx.beginPath();ctx.arc(X(A.x),Y(A.y),14,0,7);ctx.fillStyle='rgba(220,38,38,.18)';ctx.fill();
+    dot(A,'#dc2626',8);
+
+    text('B',X(0)-26,Y(0)+22,'#1e293b',22,true);
+    text('C',X(Cp.x)-8,Y(Cp.y)-16,'#1e293b',22,true);
+    text('A',X(A.x)+16,Y(A.y)-12,'#dc2626',22,true);
+    text('a = √6',X(Cp.x/2)-78,Y(Cp.y/2)-6,'#2563eb',17,true);
+    text('b = 2',X((Cp.x+A.x)/2)+14,Y((Cp.y+A.y)/2)+6,'#dc2626',17,true);
+    text('c',X(A.x/2)-4,Y(A.y/2)+(Math.abs(A.y)<0.3?26:-10),'#16a34a',18,true);
+
+    update(A,deg,si,bNow);
+  }
+
+  function update(A,deg,si,bNow){
+    const vB=$('vB'),vA=$('vA'),vC=$('vC'),vc=$('vc'),msg=$('msg');
+    if(si>=0){
+      const s=SOL[si];
+      vB.textContent='45°';vB.className='';vA.textContent=s.A+'°';vC.textContent=s.C+'°';vc.textContent=s.approx;
+      record(si);
+      msg.className='msg '+(s.cls==='ok1'?'p1':'p2');
+      msg.textContent = found.length<2 ? '🎉 1つ見つけた！ …でも，ほかにはないかな？' : '🎉 2つとも見つけた！ 右の STEP 3 で比べてみよう';
+      return;
+    }
+    vB.textContent=bNow.toFixed(1)+'°'; vB.className=Math.abs(bNow-45)<0.5?'':'off';
+    vA.textContent=ang(-A.x,-A.y,Cp.x-A.x,Cp.y-A.y).toFixed(1)+'°';
+    vC.textContent=ang(-Cp.x,-Cp.y,A.x-Cp.x,A.y-Cp.y).toFixed(1)+'°';
+    vc.textContent=Math.hypot(A.x,A.y).toFixed(2);
+    if(SOL.some(s=>Math.abs(deg-s.deg)<12)){ msg.className='msg near'; msg.textContent='B が 45° に近づいてきた！'; }
+    else msg.className='msg';
+  }
+
+  function record(si){
+    if(found.includes(si)) return;
+    found.push(si);
+    const s=SOL[si], n=found.length, el=$('f'+n);
+    el.className='found '+s.cls;
+    el.innerHTML=`<b>三角形 ${n===1?'①':'②'}</b>　c ≈ ${s.approx}，A = ${s.A}°，C = ${s.C}°（${s.shape}）`;
+    $('count').textContent=n;
+    if(n===1){ $('f2').classList.remove('hidden'); $('f2').textContent='？？？ ほかにもあるかも…'; }
+    if(n===2){
+      ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.remove('hidden'));
+      const p=predVal();
+      $('predResult').textContent = p===null ? '答え：三角形は 2つ できる！'
+        : p===2 ? '⭕ 予想どおり，三角形は 2つ できた！' : `予想は ${p===3?'3個以上':p+'個'} … 実は 2つ できた！`;
+      $('predResult').style.color = p===2 ? '#059669' : '#ea580c';
+    }
+  }
+
+  const predVal = () => { const b=document.querySelector('#pred button.on'); return b?+b.dataset.v:null; };
+  document.querySelectorAll('#pred button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#pred button').forEach(x=>x.classList.toggle('on',x===b));
+  });
+
+  // ---- ヒント ----
+  const HINTS=[
+    'ヒント1：B = 45° を保つには，点 A は B から伸びる <b>水平な直線上</b> になければならない（図のオレンジの線）。',
+    'ヒント2：点 A は点 C から距離 2 なので，<b>点 C を中心とする半径 2 の円周上</b>。円と直線の交点は いくつ ある？',
+    'ヒント3：点 C から直線までの距離（高さ）は <span class=&quot;math&quot;>h = √3 ≈ 1.73</span>。半径 2 は h より大きい → 交点は…？'
+  ];
+  $('hintBtn').onclick=()=>{
+    if(hintLv>=3) return;
+    hintLv++;
+    const d=document.createElement('div'); d.className='box key'; d.innerHTML=HINTS[hintLv-1];
+    $('hintArea').appendChild(d);
+    $('hintBtn').textContent = hintLv<3 ? `💡 ヒント（${hintLv+1}/3）` : '💡 ヒントはここまで';
+    $('hintBtn').disabled = hintLv>=3;
+    draw();
+  };
+
+  function setDeg(d){
+    d=((d%360)+360)%360;
+    const s=SOL.find(s=>Math.abs(d-s.deg)<SNAP);
+    slider.value = s ? s.deg : d;
+    const A=posOf(+slider.value);
+    const last=trail[trail.length-1];
+    if(!last||Math.hypot(last.x-A.x,last.y-A.y)>0.04) trail.push(A);
+    draw();
+  }
+
+  // ---- ドラッグ ----
+  let dragging=false;
+  const toMath = e => { const r=cv.getBoundingClientRect(); const px=(e.clientX-r.left)*W/r.width, py=(e.clientY-r.top)*H/r.height;
+    return {x:(px-OX)/S, y:(OY-py)/S, px, py}; };
+  cv.addEventListener('pointerdown',e=>{
+    const m=toMath(e), A=posOf(+slider.value);
+    const dA=Math.hypot(m.px-X(A.x),m.py-Y(A.y));
+    const dCirc=Math.abs(Math.hypot(m.x-Cp.x,m.y-Cp.y)-RB)*S;
+    if(dA<30||dCirc<20){dragging=true;cv.classList.add('drag');cv.setPointerCapture(e.pointerId);move(e);}
+  });
+  const move=e=>{ if(!dragging)return; const m=toMath(e); setDeg(Math.atan2(m.y-Cp.y,m.x-Cp.x)*180/Math.PI); };
+  cv.addEventListener('pointermove',move);
+  const up=()=>{dragging=false;cv.classList.remove('drag');};
+  cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
+  slider.addEventListener('input',()=>setDeg(+slider.value));
+  ['tBoth','tH'].forEach(i=>$(i).addEventListener('change',draw));
+
+  // ---- ステップ ----
+  document.querySelectorAll('.next').forEach(b=>b.onclick=()=>{
+    const steps=[...document.querySelectorAll(`.steps[data-g=&quot;${b.dataset.g}&quot;] .step`)];
+    const n=steps.find(s=>!s.classList.contains('show'));
+    if(!n){ steps.forEach((s,i)=>s.classList.toggle('show',i===0)); b.textContent='次のステップ ▶'; return; }
+    n.classList.add('show');
+    if(n.classList.contains('ans')){ slider.value=300; draw(); }
+    if(n.classList.contains('ans2')){ slider.value=240; draw(); }
+    if(steps.every(s=>s.classList.contains('show'))) b.textContent='最初から ↺';
+  });
+
+  // ---- リセット ----
+  $('reset').onclick=()=>{
+    found=[]; hintLv=0; trail=[];
+    $('f1').className='found'; $('f1').textContent='まだ見つかっていません';
+    $('f2').className='found hidden'; $('count').textContent='0';
+    $('hintArea').innerHTML=''; $('hintBtn').disabled=false; $('hintBtn').textContent='💡 ヒント（1/3）';
+    ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.add('hidden'));
+    ['tBoth','tH'].forEach(i=>$(i).checked=false);
+    document.querySelectorAll('#pred button').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.steps .step').forEach((s,i,a)=>s.classList.toggle('show',s===s.parentNode.firstElementChild));
+    document.querySelectorAll('.next').forEach(b=>b.textContent='次のステップ ▶');
+    slider.value=0; draw();
+  };
+
+  draw();
+})();
+</script>
+</body>
+</html>
+"></iframe>
+  <iframe title="練習27 発見編" srcdoc="<!DOCTYPE html>
+<html lang=&quot;ja&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<title>発見しよう！三角形はいくつできる？（練習）</title>
+<meta name=&quot;description&quot; content=&quot;b=2, c=√2, C=30° の三角形を自分で探し、2つの解を発見・比較する動的教材&quot;>
+<style>
+  :root{
+    --bg:#f1f5f9; --card:#fff; --ink:#1e293b; --muted:#64748b; --line:#e2e8f0;
+    --a:#16a34a; --b:#2563eb; --c:#dc2626; --p1:#4f46e5; --p2:#059669; --warn:#ea580c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:&quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,&quot;Meiryo&quot;,system-ui,sans-serif;line-height:1.6}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px}
+  header h1{margin:4px 0 2px;font-size:1.5rem}
+  header p{margin:0;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:12px}
+  @media(min-width:960px){.grid{grid-template-columns:3fr 2fr}}
+  .card{background:var(--card);border-radius:16px;box-shadow:0 4px 16px rgba(15,23,42,.08);padding:16px}
+  .problem{font-size:1.05rem;padding:12px 14px;background:#f8fafc;border-left:5px solid var(--b);border-radius:8px;margin-bottom:10px}
+  .ca{color:var(--a);font-weight:700}.cb{color:var(--b);font-weight:700}.cc{color:var(--c);font-weight:700}
+  canvas{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line);
+    background:#fff;touch-action:none;cursor:grab}
+  canvas.drag{cursor:grabbing}
+  .hint{font-size:.85rem;color:var(--muted);margin:8px 2px 0}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  button{font:inherit;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;color:#fff;transition:.15s}
+  button:hover{filter:brightness(1.1)} button:active{transform:scale(.97)}
+  button:disabled{opacity:.4;cursor:not-allowed;filter:none}
+  .btn3{background:#475569} .btn5{background:var(--warn)}
+  .pred button{background:#e2e8f0;color:var(--ink)}
+  .pred button.on{background:var(--ink);color:#fff}
+  input[type=range]{width:100%;accent-color:var(--c);margin-top:8px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+  .stat{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center}
+  .stat small{display:block;color:var(--muted);font-size:.75rem}
+  .stat b{font-size:1.15rem}
+  .off{color:var(--warn)}
+  .msg{margin-top:10px;padding:10px;border-radius:10px;text-align:center;font-weight:700;display:none}
+  .msg.p1{display:block;background:#e0e7ff;color:#3730a3}
+  .msg.p2{display:block;background:#d1fae5;color:#065f46}
+  .msg.near{display:block;background:#fff7ed;color:#9a3412}
+  h2{font-size:1.05rem;margin:0 0 8px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+  .block{margin-bottom:16px}
+  .note{display:grid;gap:8px}
+  .found{border-radius:10px;padding:10px 12px;border:2px dashed #cbd5e1;color:var(--muted);text-align:center}
+  .found.ok1{border:2px solid var(--p1);background:#eef2ff;color:var(--ink);text-align:left;animation:pop .4s}
+  .found.ok2{border:2px solid var(--p2);background:#ecfdf5;color:var(--ink);text-align:left;animation:pop .4s}
+  @keyframes pop{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}
+  .hidden{display:none}
+  .box{padding:10px 12px;border-left:4px solid var(--line);margin:8px 0;background:#f8fafc;border-radius:6px}
+  .key{border-left-color:var(--warn);background:#fff7ed}
+  .step{display:none;padding:10px 12px;border-left:4px solid var(--line);margin:8px 0;background:#f8fafc;border-radius:6px;animation:fade .35s}
+  .step.show{display:block}
+  .step h3,.box h3{margin:0 0 4px;font-size:.95rem}
+  .ans{border-left-color:var(--p1)} .ans2{border-left-color:var(--p2)}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  .math{font-family:&quot;Cambria Math&quot;,&quot;Times New Roman&quot;,serif;font-size:1.08rem}
+  table{width:100%;border-collapse:collapse;font-size:.95rem}
+  th,td{border:1px solid var(--line);padding:6px;text-align:center}
+  th{background:#f8fafc}
+  .t1{color:var(--p1);font-weight:700}.t2{color:var(--p2);font-weight:700}
+  .toggles{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.9rem}
+  .toggles label{display:flex;gap:6px;align-items:center;cursor:pointer}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+  <header>
+    <div style=&quot;display:inline-block;margin:2px 0 6px;padding:4px 12px;border-radius:999px;background:#fef3c7;color:#92400e;font-weight:700;font-size:.95rem;border:1px solid #fcd34d&quot;>&amp;#128214; 教科書：練習27（p.160）　発見編</div><h1>発見しよう！ 条件を満たす三角形はいくつできる？</h1>
+    <p>点 B を動かして、条件を満たす三角形をすべて見つけよう。</p>
+  </header>
+
+  <div class=&quot;grid&quot;>
+    <section class=&quot;card&quot;>
+      <div class=&quot;problem&quot;>
+        △ABC において <span class=&quot;cb&quot;>b = 2</span>，<span class=&quot;cc&quot;>c = √2</span>，<b>C = 30°</b> のとき，<span class=&quot;ca&quot;>a</span>，A，B を求めよ。
+      </div>
+      <canvas id=&quot;cv&quot; width=&quot;800&quot; height=&quot;480&quot; aria-label=&quot;三角形の図。点Bをドラッグできます&quot;></canvas>
+      <p class=&quot;hint&quot;>💡 赤い点 B をドラッグ（またはスライダー）。点 B は点 A から距離 √2（= c）を保って動きます。<br>
+        C = 30° になるのは，点 B がどこにあるとき？</p>
+      <input type=&quot;range&quot; id=&quot;slider&quot; min=&quot;0&quot; max=&quot;360&quot; step=&quot;0.5&quot; value=&quot;0&quot; aria-label=&quot;辺cの向き&quot;>
+
+      <div class=&quot;stats&quot;>
+        <div class=&quot;stat&quot;><small>C（条件 30°）</small><b id=&quot;vC&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>A</small><b id=&quot;vA&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>B</small><b id=&quot;vB&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>a</small><b id=&quot;va&quot;>--</b></div>
+      </div>
+      <div id=&quot;msg&quot; class=&quot;msg&quot;></div>
+
+      <div class=&quot;row&quot;>
+        <button class=&quot;btn5&quot; id=&quot;hintBtn&quot;>💡 ヒント（1/3）</button>
+        <button class=&quot;btn3&quot; id=&quot;reset&quot;>はじめから</button>
+      </div>
+      <div class=&quot;toggles hidden&quot; id=&quot;cmpToggles&quot;>
+        <label><input type=&quot;checkbox&quot; id=&quot;tBoth&quot;> 見つけた2つの三角形を重ねて表示</label>
+        <label><input type=&quot;checkbox&quot; id=&quot;tH&quot;> 点 A からの垂線（高さ）を表示</label>
+      </div>
+    </section>
+
+    <section class=&quot;card&quot;>
+      <div class=&quot;block&quot;>
+        <h2>STEP 1　予想しよう</h2>
+        <p style=&quot;margin:0 0 6px&quot;>条件を満たす三角形は，いくつできると思う？</p>
+        <div class=&quot;row pred&quot; id=&quot;pred&quot; style=&quot;margin-top:0&quot;>
+          <button data-v=&quot;0&quot;>0 個</button><button data-v=&quot;1&quot;>1 個</button>
+          <button data-v=&quot;2&quot;>2 個</button><button data-v=&quot;3&quot;>3 個以上</button>
+        </div>
+      </div>
+
+      <div class=&quot;block&quot;>
+        <h2>STEP 2　発見ノート <small style=&quot;color:var(--muted);font-weight:400&quot;>（見つけた数：<b id=&quot;count&quot;>0</b> 個）</small></h2>
+        <div class=&quot;note&quot;>
+          <div class=&quot;found&quot; id=&quot;f1&quot;>まだ見つかっていません</div>
+          <div class=&quot;found hidden&quot; id=&quot;f2&quot;>？？？</div>
+        </div>
+        <div id=&quot;hintArea&quot;></div>
+      </div>
+
+      <div class=&quot;block hidden&quot; id=&quot;cmp&quot;>
+        <h2>STEP 3　2つの三角形を比べよう</h2>
+        <p id=&quot;predResult&quot; style=&quot;font-weight:700;margin:4px 0 8px&quot;></p>
+        <table>
+          <tr><th></th><th class=&quot;t1&quot;>三角形 ①</th><th class=&quot;t2&quot;>三角形 ②</th></tr>
+          <tr><th>b, c, C</th><td colspan=&quot;2&quot;>2，√2，30°（共通）</td></tr>
+          <tr><th>a</th><td class=&quot;t1&quot;>√3 + 1</td><td class=&quot;t2&quot;>√3 − 1</td></tr>
+          <tr><th>B</th><td class=&quot;t1&quot;>45°</td><td class=&quot;t2&quot;>135°</td></tr>
+          <tr><th>A</th><td class=&quot;t1&quot;>105°</td><td class=&quot;t2&quot;>15°</td></tr>
+          <tr><th>形</th><td class=&quot;t1&quot;>鈍角三角形（A が鈍角）</td><td class=&quot;t2&quot;>鈍角三角形（B が鈍角）</td></tr>
+        </table>
+        <div class=&quot;box key&quot;>
+          <h3>🔎 気づいたことは？</h3>
+          ・2つの B を足すと <span class=&quot;math&quot;>45° + 135° = 180°</span>（sin B の値が同じ！）<br>
+          ・高さ <span class=&quot;math&quot;>h = b sin C = 1</span> と比べると <span class=&quot;math&quot;>h &amp;lt; c &amp;lt; b</span> → 円が直線と 2点で交わる<br>
+          ・例題13と同じしくみ！ どちらも「わかっている角の<b>向かいの辺</b>」が短いときに 2つできる
+        </div>
+      </div>
+
+      <div class=&quot;block hidden&quot; id=&quot;calc&quot;>
+        <h2>STEP 4　計算で確かめよう（場合分け）</h2>
+        <div class=&quot;steps&quot; data-g=&quot;cos&quot;>
+          <div class=&quot;step show&quot;><h3>① 余弦定理で a の方程式をつくる</h3>
+            <span class=&quot;math&quot;>c² = a² + b² − 2ab cos C</span><br>
+            <span class=&quot;math&quot;>2 = a² + 4 − 2·a·2·(√3/2)</span></div>
+          <div class=&quot;step&quot;><h3>② a の2次方程式</h3>
+            <span class=&quot;math&quot;>a² − 2√3 a + 2 = 0</span></div>
+          <div class=&quot;step key&quot;><h3>③ 解が2つ → 場合分けが必要！</h3>
+            <span class=&quot;math&quot;>a = √3 ± 1</span>（どちらも正なので両方とも適する）<br>
+            → 図で見つけた 2つの三角形と一致！</div>
+          <div class=&quot;step ans&quot;><h3>(i) a = √3 + 1 のとき</h3>
+            <span class=&quot;math&quot;>cos B = (c² + a² − b²) / 2ca = 1/√2</span> → <b>B = 45°，A = 105°</b></div>
+          <div class=&quot;step ans2&quot;><h3>(ii) a = √3 − 1 のとき</h3>
+            <span class=&quot;math&quot;>cos B = (c² + a² − b²) / 2ca = −1/√2</span> → <b>B = 135°，A = 15°</b></div>
+        </div>
+        <div class=&quot;row&quot;><button class=&quot;btn3 next&quot; data-g=&quot;cos&quot;>次のステップ ▶</button></div>
+      </div>
+    </section>
+  </div>
+  <footer>数学Ⅰ 図形と計量 ― 三角形の決定（2つの解の発見・練習）</footer>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const cv = $('cv'), ctx = cv.getContext('2d'), slider = $('slider');
+  const W = 800, H = 480;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+
+  const S = 150, OX = 130, OY = 410;
+  const R3 = Math.sqrt(3), RC = Math.SQRT2;
+  const X = x => OX + x * S, Y = y => OY - y * S;
+  const Cp = {x:0, y:0}, Ap = {x:R3, y:1};
+  const SOL = [
+    {deg:315, x:R3+1, A:105, B:45,  approx:'2.73', col:'#4f46e5', bg:'rgba(79,70,229,.13)', cls:'ok1', shape:'鈍角三角形'},
+    {deg:225, x:R3-1, A:15,  B:135, approx:'0.73', col:'#059669', bg:'rgba(5,150,105,.15)', cls:'ok2', shape:'鈍角三角形'}];
+  const SNAP = 2.5;
+
+  let found = [], hintLv = 0, trail = [];
+
+  const posOf = deg => { const t = deg*Math.PI/180; return {x:Ap.x+RC*Math.cos(t), y:Ap.y+RC*Math.sin(t)}; };
+  const ang = (ux,uy,vx,vy) => Math.acos(Math.max(-1,Math.min(1,(ux*vx+uy*vy)/(Math.hypot(ux,uy)*Math.hypot(vx,vy)))))*180/Math.PI;
+
+  function line(p,q,col,w,dash){ctx.beginPath();ctx.setLineDash(dash||[]);ctx.moveTo(X(p.x),Y(p.y));ctx.lineTo(X(q.x),Y(q.y));
+    ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.stroke();ctx.setLineDash([]);}
+  function dot(p,col,r){ctx.beginPath();ctx.arc(X(p.x),Y(p.y),r,0,7);ctx.fillStyle=col;ctx.fill();}
+  function text(s,x,y,col,size,bold){ctx.font=`${bold?'bold ':''}${size}px &quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,Meiryo,sans-serif`;ctx.fillStyle=col;ctx.fillText(s,x,y);}
+  function tri(B,fill){ctx.beginPath();ctx.moveTo(X(0),Y(0));ctx.lineTo(X(Ap.x),Y(Ap.y));ctx.lineTo(X(B.x),Y(B.y));ctx.closePath();ctx.fillStyle=fill;ctx.fill();}
+
+  function draw(){
+    const deg = parseFloat(slider.value);
+    const B = posOf(deg);
+    const si = SOL.findIndex(s => Math.abs(deg - s.deg) < 0.01);
+    ctx.clearRect(0,0,W,H);
+
+    ctx.strokeStyle='#f1f5f9';ctx.lineWidth=1;
+    for(let gx=OX%30;gx<W;gx+=30){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+    for(let gy=OY%30;gy<H;gy+=30){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+
+    line({x:-0.5,y:0},{x:4.4,y:0}, hintLv>=1?'#f59e0b':'#cbd5e1', hintLv>=1?3:2,[6,6]);
+    if(hintLv>=1) text('C = 30° を保つには，B はこの直線上',X(2.1),Y(0)+44,'#b45309',15,true);
+
+    ctx.fillStyle='rgba(220,38,38,.25)';
+    trail.forEach(p=>{ctx.beginPath();ctx.arc(X(p.x),Y(p.y),2,0,7);ctx.fill();});
+
+    if(hintLv>=2){
+      ctx.beginPath();ctx.setLineDash([6,6]);ctx.arc(X(Ap.x),Y(Ap.y),RC*S,0,7);
+      ctx.strokeStyle='#f87171';ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);
+    }
+    if(hintLv>=3 || $('tH').checked){
+      line(Ap,{x:R3,y:0},'#ea580c',2,[3,4]);
+      ctx.strokeStyle='#ea580c';ctx.lineWidth=1.5;ctx.strokeRect(X(R3),Y(0)-12,12,12);
+      text('h = 1',X(R3)+8,Y(0.5),'#ea580c',16,true);
+    }
+
+    found.forEach(i=>{const s=SOL[i];dot({x:s.x,y:0},s.col,7);
+      text(i===found[0]?'①':'②',X(s.x)-8,Y(0)+26,s.col,18,true);});
+
+    if($('tBoth').checked){ found.forEach(i=>{const s=SOL[i],P={x:s.x,y:0};tri(P,s.bg);line(Ap,P,s.col,2,[4,4]);line(Cp,P,s.col,2,[4,4]);}); }
+    else if(si>=0){ tri(B, SOL[si].bg); }
+
+    line(Cp,Ap,'#2563eb',4); line(Ap,B,'#dc2626',4); line(Cp,B,'#16a34a',4);
+    const cNow = ang(B.x,B.y,Ap.x,Ap.y);
+    const aStart = -Math.atan2(B.y,B.x), aEnd = -Math.PI/6;
+    ctx.beginPath();ctx.arc(X(0),Y(0),40,Math.min(aStart,aEnd),Math.max(aStart,aEnd));
+    ctx.strokeStyle=si>=0?'#4f46e5':'#94a3b8';ctx.lineWidth=2;ctx.stroke();
+
+    dot(Cp,'#1e293b',6); dot(Ap,'#1e293b',6);
+    ctx.beginPath();ctx.arc(X(B.x),Y(B.y),14,0,7);ctx.fillStyle='rgba(220,38,38,.18)';ctx.fill();
+    dot(B,'#dc2626',8);
+
+    text('C',X(0)-26,Y(0)+22,'#1e293b',22,true);
+    text('A',X(Ap.x)-8,Y(Ap.y)-16,'#1e293b',22,true);
+    text('B',X(B.x)+16,Y(B.y)-12,'#dc2626',22,true);
+    text('b = 2',X(Ap.x/2)-40,Y(Ap.y/2)-14,'#2563eb',17,true);
+    text('c = √2',X((Ap.x+B.x)/2)+14,Y((Ap.y+B.y)/2)+6,'#dc2626',17,true);
+    text('a',X(B.x/2)-4,Y(B.y/2)+(Math.abs(B.y)<0.3?26:-10),'#16a34a',18,true);
+
+    update(B,deg,si,cNow);
+  }
+
+  function update(B,deg,si,cNow){
+    const vC=$('vC'),vA=$('vA'),vB=$('vB'),va=$('va'),msg=$('msg');
+    if(si>=0){
+      const s=SOL[si];
+      vC.textContent='30°';vC.className='';vA.textContent=s.A+'°';vB.textContent=s.B+'°';va.textContent=s.approx;
+      record(si);
+      msg.className='msg '+(s.cls==='ok1'?'p1':'p2');
+      msg.textContent = found.length<2 ? '🎉 1つ見つけた！ …でも，ほかにはないかな？' : '🎉 2つとも見つけた！ 右の STEP 3 で比べてみよう';
+      return;
+    }
+    vC.textContent=cNow.toFixed(1)+'°'; vC.className=Math.abs(cNow-30)<0.5?'':'off';
+    vA.textContent=ang(-Ap.x,-Ap.y,B.x-Ap.x,B.y-Ap.y).toFixed(1)+'°';
+    vB.textContent=ang(-B.x,-B.y,Ap.x-B.x,Ap.y-B.y).toFixed(1)+'°';
+    va.textContent=Math.hypot(B.x,B.y).toFixed(2);
+    if(SOL.some(s=>Math.abs(deg-s.deg)<12)){ msg.className='msg near'; msg.textContent='C が 30° に近づいてきた！'; }
+    else msg.className='msg';
+  }
+
+  function record(si){
+    if(found.includes(si)) return;
+    found.push(si);
+    const s=SOL[si], n=found.length, el=$('f'+n);
+    el.className='found '+s.cls;
+    el.innerHTML=`<b>三角形 ${n===1?'①':'②'}</b>　a ≈ ${s.approx}，A = ${s.A}°，B = ${s.B}°（${s.shape}）`;
+    $('count').textContent=n;
+    if(n===1){ $('f2').classList.remove('hidden'); $('f2').textContent='？？？ ほかにもあるかも…'; }
+    if(n===2){
+      ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.remove('hidden'));
+      const p=predVal();
+      $('predResult').textContent = p===null ? '答え：三角形は 2つ できる！'
+        : p===2 ? '⭕ 予想どおり，三角形は 2つ できた！' : `予想は ${p===3?'3個以上':p+'個'} … 実は 2つ できた！`;
+      $('predResult').style.color = p===2 ? '#059669' : '#ea580c';
+    }
+  }
+
+  const predVal = () => { const b=document.querySelector('#pred button.on'); return b?+b.dataset.v:null; };
+  document.querySelectorAll('#pred button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#pred button').forEach(x=>x.classList.toggle('on',x===b));
+  });
+
+  const HINTS=[
+    'ヒント1：C = 30° を保つには，点 B は C から伸びる <b>水平な直線上</b> になければならない（図のオレンジの線）。',
+    'ヒント2：点 B は点 A から距離 √2 なので，<b>点 A を中心とする半径 √2 の円周上</b>。円と直線の交点は いくつ ある？',
+    'ヒント3：点 A から直線までの距離（高さ）は <span class=&quot;math&quot;>h = 1</span>。半径 √2 ≈ 1.41 は h より大きい → 交点は…？'
+  ];
+  $('hintBtn').onclick=()=>{
+    if(hintLv>=3) return;
+    hintLv++;
+    const d=document.createElement('div'); d.className='box key'; d.innerHTML=HINTS[hintLv-1];
+    $('hintArea').appendChild(d);
+    $('hintBtn').textContent = hintLv<3 ? `💡 ヒント（${hintLv+1}/3）` : '💡 ヒントはここまで';
+    $('hintBtn').disabled = hintLv>=3;
+    draw();
+  };
+
+  function setDeg(d){
+    d=((d%360)+360)%360;
+    const s=SOL.find(s=>Math.abs(d-s.deg)<SNAP);
+    slider.value = s ? s.deg : d;
+    const B=posOf(+slider.value);
+    const last=trail[trail.length-1];
+    if(!last||Math.hypot(last.x-B.x,last.y-B.y)>0.04) trail.push(B);
+    draw();
+  }
+
+  let dragging=false;
+  const toMath = e => { const r=cv.getBoundingClientRect(); const px=(e.clientX-r.left)*W/r.width, py=(e.clientY-r.top)*H/r.height;
+    return {x:(px-OX)/S, y:(OY-py)/S, px, py}; };
+  cv.addEventListener('pointerdown',e=>{
+    const m=toMath(e), B=posOf(+slider.value);
+    const dB=Math.hypot(m.px-X(B.x),m.py-Y(B.y));
+    const dCirc=Math.abs(Math.hypot(m.x-Ap.x,m.y-Ap.y)-RC)*S;
+    if(dB<30||dCirc<20){dragging=true;cv.classList.add('drag');cv.setPointerCapture(e.pointerId);move(e);}
+  });
+  const move=e=>{ if(!dragging)return; const m=toMath(e); setDeg(Math.atan2(m.y-Ap.y,m.x-Ap.x)*180/Math.PI); };
+  cv.addEventListener('pointermove',move);
+  const up=()=>{dragging=false;cv.classList.remove('drag');};
+  cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
+  slider.addEventListener('input',()=>setDeg(+slider.value));
+  ['tBoth','tH'].forEach(i=>$(i).addEventListener('change',draw));
+
+  document.querySelectorAll('.next').forEach(b=>b.onclick=()=>{
+    const steps=[...document.querySelectorAll(`.steps[data-g=&quot;${b.dataset.g}&quot;] .step`)];
+    const n=steps.find(s=>!s.classList.contains('show'));
+    if(!n){ steps.forEach((s,i)=>s.classList.toggle('show',i===0)); b.textContent='次のステップ ▶'; return; }
+    n.classList.add('show');
+    if(n.classList.contains('ans')){ slider.value=315; draw(); }
+    if(n.classList.contains('ans2')){ slider.value=225; draw(); }
+    if(steps.every(s=>s.classList.contains('show'))) b.textContent='最初から ↺';
+  });
+
+  $('reset').onclick=()=>{
+    found=[]; hintLv=0; trail=[];
+    $('f1').className='found'; $('f1').textContent='まだ見つかっていません';
+    $('f2').className='found hidden'; $('count').textContent='0';
+    $('hintArea').innerHTML=''; $('hintBtn').disabled=false; $('hintBtn').textContent='💡 ヒント（1/3）';
+    ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.add('hidden'));
+    ['tBoth','tH'].forEach(i=>$(i).checked=false);
+    document.querySelectorAll('#pred button').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.steps .step').forEach(s=>s.classList.toggle('show',s===s.parentNode.firstElementChild));
+    document.querySelectorAll('.next').forEach(b=>b.textContent='次のステップ ▶');
+    slider.value=0; draw();
+  };
+
+  draw();
+})();
+</script>
+</body>
+</html>
+"></iframe>
+  <iframe title="練習27 解説・確認編" srcdoc="<!DOCTYPE html>
+<html lang=&quot;ja&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<title>三角形の決定 ― 練習（2つの解）</title>
+<meta name=&quot;description&quot; content=&quot;b=2, c=√2, C=30° の三角形が2通り存在することを、点Bを動かして確かめる動的教材&quot;>
+<style>
+  :root{
+    --bg:#f1f5f9; --card:#fff; --ink:#1e293b; --muted:#64748b; --line:#e2e8f0;
+    --a:#16a34a; --b:#2563eb; --c:#dc2626; --p1:#4f46e5; --p2:#059669; --warn:#ea580c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:&quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,&quot;Meiryo&quot;,system-ui,sans-serif;line-height:1.6}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px}
+  header h1{margin:4px 0 2px;font-size:1.5rem}
+  header p{margin:0;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:12px}
+  @media(min-width:960px){.grid{grid-template-columns:3fr 2fr}}
+  .card{background:var(--card);border-radius:16px;box-shadow:0 4px 16px rgba(15,23,42,.08);padding:16px}
+  .problem{font-size:1.05rem;padding:12px 14px;background:#f8fafc;border-left:5px solid var(--b);border-radius:8px;margin-bottom:10px}
+  .ca{color:var(--a);font-weight:700}.cb{color:var(--b);font-weight:700}.cc{color:var(--c);font-weight:700}
+  canvas{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line);
+    background:#fff;touch-action:none;cursor:grab}
+  canvas.drag{cursor:grabbing}
+  .hint{font-size:.85rem;color:var(--muted);margin:8px 2px 0}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  button{font:inherit;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;color:#fff;transition:.15s}
+  button:hover{filter:brightness(1.1)} button:active{transform:scale(.97)}
+  .btn1{background:var(--p1)} .btn2{background:var(--p2)} .btn3{background:#475569} .btn4{background:#0ea5e9}
+  .toggles{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.9rem}
+  .toggles label{display:flex;gap:6px;align-items:center;cursor:pointer}
+  input[type=range]{width:100%;accent-color:var(--c);margin-top:8px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+  .stat{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center}
+  .stat small{display:block;color:var(--muted);font-size:.75rem}
+  .stat b{font-size:1.15rem}
+  .off{color:var(--warn)}
+  .msg{margin-top:10px;padding:10px;border-radius:10px;text-align:center;font-weight:700;display:none}
+  .msg.p1{display:block;background:#e0e7ff;color:#3730a3}
+  .msg.p2{display:block;background:#d1fae5;color:#065f46}
+  .msg.near{display:block;background:#fff7ed;color:#9a3412}
+  .tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+  .tab{background:#e2e8f0;color:var(--ink);padding:8px 12px;font-size:.9rem}
+  .tab.on{background:var(--ink);color:#fff}
+  .step{display:none;padding:10px 12px;border-left:4px solid var(--line);margin:8px 0;background:#f8fafc;border-radius:6px;animation:fade .35s}
+  .step.show{display:block}
+  .step h3{margin:0 0 4px;font-size:.95rem}
+  .math{font-family:&quot;Cambria Math&quot;,&quot;Times New Roman&quot;,serif;font-size:1.08rem}
+  .ans{border-left-color:var(--p1)} .ans2{border-left-color:var(--p2)}
+  .key{border-left-color:var(--warn);background:#fff7ed}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  .quiz .q{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+  .quiz input{width:70px;font:inherit;padding:4px 6px;border:1px solid #cbd5e1;border-radius:6px;text-align:right}
+  .quiz input:focus{outline:2px solid var(--b);border-color:transparent}
+  .quiz .unit{font-weight:700;margin-right:8px}
+  .quiz .r{font-weight:700;margin-left:6px}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+  <header>
+    <div style=&quot;display:inline-block;margin:2px 0 6px;padding:4px 12px;border-radius:999px;background:#fef3c7;color:#92400e;font-weight:700;font-size:.95rem;border:1px solid #fcd34d&quot;>&amp;#128214; 教科書：練習27（p.160）　解説・確認編</div><h1>三角形の決定 ― 練習（解が2つある場合）</h1>
+    <p>点 B をドラッグして、条件を満たす三角形を探してみよう。</p>
+  </header>
+
+  <div class=&quot;grid&quot;>
+    <section class=&quot;card&quot;>
+      <div class=&quot;problem&quot;>
+        △ABC において <span class=&quot;cb&quot;>b = 2</span>，<span class=&quot;cc&quot;>c = √2</span>，<b>C = 30°</b> のとき，<span class=&quot;ca&quot;>a</span>，A，B を求めよ。
+      </div>
+      <canvas id=&quot;cv&quot; width=&quot;800&quot; height=&quot;480&quot; aria-label=&quot;三角形の図。点Bをドラッグできます&quot;></canvas>
+      <p class=&quot;hint&quot;>💡 赤い点 B をドラッグ（またはスライダー）。点 B は点 A を中心とする半径 c = √2 の円周上を動きます。</p>
+      <input type=&quot;range&quot; id=&quot;slider&quot; min=&quot;0&quot; max=&quot;360&quot; step=&quot;0.5&quot; value=&quot;270&quot; aria-label=&quot;辺cの向き&quot;>
+
+      <div class=&quot;stats&quot;>
+        <div class=&quot;stat&quot;><small>C（条件 30°）</small><b id=&quot;vC&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>A</small><b id=&quot;vA&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>B</small><b id=&quot;vB&quot;>--</b></div>
+        <div class=&quot;stat&quot;><small>a</small><b id=&quot;va&quot;>--</b></div>
+      </div>
+      <div id=&quot;msg&quot; class=&quot;msg&quot;></div>
+
+      <div class=&quot;row&quot;>
+        <button class=&quot;btn1&quot; id=&quot;go1&quot;>解1へ移動（B₁）</button>
+        <button class=&quot;btn2&quot; id=&quot;go2&quot;>解2へ移動（B₂）</button>
+        <button class=&quot;btn4&quot; id=&quot;anim&quot;>▶ 自動で1周</button>
+        <button class=&quot;btn3&quot; id=&quot;reset&quot;>リセット</button>
+      </div>
+      <div class=&quot;toggles&quot;>
+        <label><input type=&quot;checkbox&quot; id=&quot;tCand&quot;> 答えの位置（B₁, B₂）を表示</label>
+        <label><input type=&quot;checkbox&quot; id=&quot;tH&quot;> 点 A からの垂線（高さ）を表示</label>
+        <label><input type=&quot;checkbox&quot; id=&quot;tBoth&quot;> 2つの三角形を重ねて表示</label>
+      </div>
+    </section>
+
+    <section class=&quot;card&quot;>
+      <div class=&quot;tabs&quot;>
+        <button class=&quot;tab on&quot; data-t=&quot;quiz&quot;>① 自分で解く</button>
+        <button class=&quot;tab&quot; data-t=&quot;cos&quot;>② 余弦定理で</button>
+        <button class=&quot;tab&quot; data-t=&quot;sin&quot;>③ 正弦定理で</button>
+      </div>
+
+      <div id=&quot;p-quiz&quot; class=&quot;pane quiz&quot;>
+        <p>図で確かめる前に、答えを数値で入力してみよう（a は小数の近似値で OK）。</p>
+        <p class=&quot;q&quot;>解1：a ≈ <input id=&quot;q1&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;解1のa&quot;><span class=&quot;unit&quot;></span>
+          A = <input id=&quot;q2&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;解1の角A&quot;><span class=&quot;unit&quot;>°</span>
+          B = <input id=&quot;q3&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;解1の角B&quot;><span class=&quot;unit&quot;>°</span>
+          <span class=&quot;r&quot; id=&quot;r1&quot;></span></p>
+        <p class=&quot;q&quot;>解2：a ≈ <input id=&quot;q4&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;解2のa&quot;><span class=&quot;unit&quot;></span>
+          A = <input id=&quot;q5&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;解2の角A&quot;><span class=&quot;unit&quot;>°</span>
+          B = <input id=&quot;q6&quot; inputmode=&quot;decimal&quot; autocomplete=&quot;off&quot; aria-label=&quot;解2の角B&quot;><span class=&quot;unit&quot;>°</span>
+          <span class=&quot;r&quot; id=&quot;r2&quot;></span></p>
+        <button class=&quot;btn1&quot; id=&quot;check&quot;>答え合わせ</button>
+        <div class=&quot;step key show&quot; style=&quot;margin-top:14px&quot;>
+          <h3>🔎 なぜ解が2つあるの？</h3>
+          点 A から辺 CB（の延長）までの高さは <span class=&quot;math&quot;>h = b sin C = 2 · (1/2) = 1</span>。<br>
+          <span class=&quot;math&quot;>h &amp;lt; c &amp;lt; b</span>（1 &amp;lt; 1.41 &amp;lt; 2）なので，半径 c の円が直線と<b>2点で交わる</b>。<br>
+          「点 A からの垂線」を表示して確かめよう。
+        </div>
+      </div>
+
+      <div id=&quot;p-cos&quot; class=&quot;pane&quot; style=&quot;display:none&quot;>
+        <div class=&quot;steps&quot; data-g=&quot;cos&quot;>
+          <div class=&quot;step show&quot;><h3>Step 1　余弦定理を立てる</h3>
+            <span class=&quot;math&quot;>c² = a² + b² − 2ab cos C</span></div>
+          <div class=&quot;step&quot;><h3>Step 2　値を代入</h3>
+            <span class=&quot;math&quot;>2 = a² + 4 − 2·a·2·(√3/2)</span><br>
+            <span class=&quot;math&quot;>a² − 2√3 a + 2 = 0</span></div>
+          <div class=&quot;step&quot;><h3>Step 3　解の公式</h3>
+            <span class=&quot;math&quot;>a = √3 ± √(3 − 2) = √3 ± 1</span><br>どちらも正 → <b>両方とも三角形になる！</b></div>
+          <div class=&quot;step ans&quot;><h3>Step 4　a = √3 + 1 のとき</h3>
+            <span class=&quot;math&quot;>cos B = (c² + a² − b²) / 2ca = (2 + 2√3) / 2√2(√3 + 1) = 1/√2</span><br>
+            → <b>B = 45°，A = 105°</b></div>
+          <div class=&quot;step ans2&quot;><h3>Step 5　a = √3 − 1 のとき</h3>
+            <span class=&quot;math&quot;>cos B = (2 − 2√3) / 2√2(√3 − 1) = −1/√2</span><br>
+            → <b>B = 135°，A = 15°</b></div>
+        </div>
+        <div class=&quot;row&quot;><button class=&quot;btn3 next&quot; data-g=&quot;cos&quot;>次のステップ ▶</button></div>
+      </div>
+
+      <div id=&quot;p-sin&quot; class=&quot;pane&quot; style=&quot;display:none&quot;>
+        <div class=&quot;steps&quot; data-g=&quot;sin&quot;>
+          <div class=&quot;step show&quot;><h3>Step 1　正弦定理</h3>
+            <span class=&quot;math&quot;>b / sin B = c / sin C</span></div>
+          <div class=&quot;step&quot;><h3>Step 2　sin B を求める</h3>
+            <span class=&quot;math&quot;>sin B = b sin C / c = 2 · (1/2) / √2 = 1/√2</span></div>
+          <div class=&quot;step key&quot;><h3>Step 3　⚠ ここが落とし穴</h3>
+            0° &amp;lt; B &amp;lt; 150° の範囲で sin B = 1/√2 となるのは<br>
+            <b>B = 45° と B = 135° の2つ</b>（どちらも B + C &amp;lt; 180° を満たす）</div>
+          <div class=&quot;step ans&quot;><h3>Step 4　B = 45° のとき</h3>
+            A = 105°，<span class=&quot;math&quot;>a = c sin A / sin C = √3 + 1</span></div>
+          <div class=&quot;step ans2&quot;><h3>Step 5　B = 135° のとき</h3>
+            A = 15°，<span class=&quot;math&quot;>a = c sin A / sin C = √3 − 1</span></div>
+        </div>
+        <div class=&quot;row&quot;><button class=&quot;btn3 next&quot; data-g=&quot;sin&quot;>次のステップ ▶</button></div>
+      </div>
+    </section>
+  </div>
+  <footer>数学Ⅰ 図形と計量 ― 三角形の決定（2つの解）</footer>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const cv = $('cv'), ctx = cv.getContext('2d'), slider = $('slider');
+  const W = 800, H = 480;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+
+  const S = 150, OX = 130, OY = 410;
+  const R3 = Math.sqrt(3), RC = Math.SQRT2;
+  const X = x => OX + x * S, Y = y => OY - y * S;
+  const Cp = {x:0, y:0}, Ap = {x:R3, y:1};
+  const SOL = [
+    {deg:315, x:R3+1, A:105, B:45,  a:'√3 + 1', col:'#4f46e5', bg:'rgba(79,70,229,.12)', name:'解1'},
+    {deg:225, x:R3-1, A:15,  B:135, a:'√3 − 1', col:'#059669', bg:'rgba(5,150,105,.14)', name:'解2'}];
+  const SNAP = 2.5;
+
+  const posOf = deg => { const t = deg*Math.PI/180; return {x:Ap.x+RC*Math.cos(t), y:Ap.y+RC*Math.sin(t)}; };
+  const ang = (ux,uy,vx,vy) => Math.acos(Math.max(-1,Math.min(1,(ux*vx+uy*vy)/(Math.hypot(ux,uy)*Math.hypot(vx,vy)))))*180/Math.PI;
+
+  function line(p,q,col,w,dash){ctx.beginPath();ctx.setLineDash(dash||[]);ctx.moveTo(X(p.x),Y(p.y));ctx.lineTo(X(q.x),Y(q.y));
+    ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.stroke();ctx.setLineDash([]);}
+  function dot(p,col,r){ctx.beginPath();ctx.arc(X(p.x),Y(p.y),r,0,7);ctx.fillStyle=col;ctx.fill();}
+  function text(s,x,y,col,size,bold){ctx.font=`${bold?'bold ':''}${size}px &quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,Meiryo,sans-serif`;ctx.fillStyle=col;ctx.fillText(s,x,y);}
+  function tri(B,fill){ctx.beginPath();ctx.moveTo(X(0),Y(0));ctx.lineTo(X(Ap.x),Y(Ap.y));ctx.lineTo(X(B.x),Y(B.y));ctx.closePath();ctx.fillStyle=fill;ctx.fill();}
+
+  function draw(){
+    const deg = parseFloat(slider.value);
+    const B = posOf(deg);
+    const snapped = SOL.find(s => Math.abs(deg - s.deg) < 0.01);
+    ctx.clearRect(0,0,W,H);
+
+    ctx.strokeStyle='#f1f5f9';ctx.lineWidth=1;
+    for(let gx=OX%30;gx<W;gx+=30){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+    for(let gy=OY%30;gy<H;gy+=30){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+
+    line({x:-0.5,y:0},{x:4.4,y:0},'#94a3b8',2,[6,6]);
+    ctx.beginPath();ctx.setLineDash([6,6]);ctx.arc(X(Ap.x),Y(Ap.y),RC*S,0,7);ctx.strokeStyle='#fca5a5';ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);
+
+    if($('tBoth').checked){ SOL.forEach(s=>{const P={x:s.x,y:0};tri(P,s.bg);line(Ap,P,s.col,2,[4,4]);}); }
+    else if(snapped){ tri(B, snapped.bg); }
+
+    if($('tH').checked){
+      line(Ap,{x:R3,y:0},'#ea580c',2,[3,4]);
+      ctx.strokeStyle='#ea580c';ctx.lineWidth=1.5;ctx.strokeRect(X(R3),Y(0)-12,12,12);
+      text('h = 1',X(R3)+8,Y(0.5),'#ea580c',16,true);
+    }
+    if($('tCand').checked || $('tBoth').checked){
+      SOL.forEach((s,i)=>{dot({x:s.x,y:0},s.col,7);text(i?'B₂':'B₁',X(s.x)-10,Y(0)+28,s.col,17,true);});
+    }
+
+    line(Cp,Ap,'#2563eb',4); line(Ap,B,'#dc2626',4); line(Cp,B,'#16a34a',4);
+    ctx.beginPath();ctx.arc(X(0),Y(0),40,0,-Math.PI/6,true);ctx.strokeStyle='#2563eb';ctx.lineWidth=2;ctx.stroke();
+    text('30°',X(0)+46,Y(0)-6,'#1e293b',15);
+
+    dot(Cp,'#1e293b',6); dot(Ap,'#1e293b',6);
+    ctx.beginPath();ctx.arc(X(B.x),Y(B.y),14,0,7);ctx.fillStyle='rgba(220,38,38,.18)';ctx.fill();
+    dot(B,'#dc2626',8);
+
+    text('C',X(0)-26,Y(0)+22,'#1e293b',22,true);
+    text('A',X(Ap.x)-8,Y(Ap.y)-16,'#1e293b',22,true);
+    text('B',X(B.x)+16,Y(B.y)-12,'#dc2626',22,true);
+    text('b = 2',X(Ap.x/2)-40,Y(Ap.y/2)-14,'#2563eb',17,true);
+    text('c = √2',X((Ap.x+B.x)/2)+14,Y((Ap.y+B.y)/2)+6,'#dc2626',17,true);
+    text('a',X(B.x/2)-4,Y(B.y/2)+(Math.abs(B.y)<0.3?26:-10),'#16a34a',18,true);
+
+    update(B,deg,snapped);
+  }
+
+  function update(B,deg,s){
+    const vC=$('vC'),vA=$('vA'),vB=$('vB'),va=$('va'),msg=$('msg');
+    if(s){
+      vC.textContent='30°';vC.className='';vA.textContent=s.A+'°';vB.textContent=s.B+'°';va.textContent=s.a;
+      msg.className='msg '+(s.deg===315?'p1':'p2');
+      msg.textContent=`🎉 ${s.name}：a = ${s.a}，A = ${s.A}°，B = ${s.B}°`;
+      return;
+    }
+    const a=Math.hypot(B.x,B.y);
+    if(a<1e-6){vC.textContent=vA.textContent=vB.textContent='--';va.textContent='0';msg.className='msg';return;}
+    const c=ang(B.x,B.y,Ap.x,Ap.y);
+    vC.textContent=c.toFixed(1)+'°'; vC.className=Math.abs(c-30)<0.5?'':'off';
+    vA.textContent=ang(-Ap.x,-Ap.y,B.x-Ap.x,B.y-Ap.y).toFixed(1)+'°';
+    vB.textContent=ang(-B.x,-B.y,Ap.x-B.x,Ap.y-B.y).toFixed(1)+'°';
+    va.textContent=a.toFixed(2);
+    if(SOL.some(s=>Math.abs(deg-s.deg)<12)){ msg.className='msg near'; msg.textContent='もう少し！ 点 B を直線（点線）に乗せよう'; }
+    else msg.className='msg';
+  }
+
+  function setDeg(d){
+    d=((d%360)+360)%360;
+    const s=SOL.find(s=>Math.abs(d-s.deg)<SNAP);
+    slider.value = s ? s.deg : d;
+    draw();
+  }
+
+  // ---- ドラッグ ----
+  let dragging=false;
+  const toMath = e => { const r=cv.getBoundingClientRect(); const px=(e.clientX-r.left)*W/r.width, py=(e.clientY-r.top)*H/r.height;
+    return {x:(px-OX)/S, y:(OY-py)/S, px, py}; };
+  cv.addEventListener('pointerdown',e=>{
+    const m=toMath(e), B=posOf(+slider.value);
+    const dB=Math.hypot(m.px-X(B.x),m.py-Y(B.y));
+    const dCirc=Math.abs(Math.hypot(m.x-Ap.x,m.y-Ap.y)-RC)*S;
+    if(dB<30||dCirc<20){dragging=true;cv.classList.add('drag');cv.setPointerCapture(e.pointerId);stopAnim();move(e);}
+  });
+  const move=e=>{ if(!dragging)return; const m=toMath(e); setDeg(Math.atan2(m.y-Ap.y,m.x-Ap.x)*180/Math.PI); };
+  cv.addEventListener('pointermove',move);
+  const up=()=>{dragging=false;cv.classList.remove('drag');};
+  cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
+
+  slider.addEventListener('input',()=>{stopAnim();setDeg(+slider.value);});
+
+  // ---- アニメーション ----
+  let raf=null;
+  function stopAnim(){ if(raf){cancelAnimationFrame(raf);raf=null;} $('anim').textContent='▶ 自動で1周'; }
+  function tween(to){
+    stopAnim(); const from=+slider.value; const diff=((to-from+540)%360)-180; const t0=performance.now();
+    const step=t=>{const k=Math.min(1,(t-t0)/700), e=1-Math.pow(1-k,3);
+      slider.value=k===1?to:((from+diff*e)%360+360)%360; draw(); raf=k<1?requestAnimationFrame(step):null;};
+    raf=requestAnimationFrame(step);
+  }
+  $('go1').onclick=()=>tween(315);
+  $('go2').onclick=()=>tween(225);
+  $('reset').onclick=()=>{['tCand','tH','tBoth'].forEach(i=>$(i).checked=false);tween(270);};
+  $('anim').onclick=()=>{
+    if(raf){stopAnim();return;}
+    $('anim').textContent='⏸ 停止'; let last=performance.now(), pause=0;
+    const step=t=>{const dt=t-last;last=t;
+      if(pause>0){pause-=dt;} else {
+        const prev=+slider.value; let d=(prev+dt*0.03)%360;
+        const hit=SOL.find(s=>prev<s.deg&amp;&amp;d>=s.deg);
+        slider.value=hit?hit.deg:d; if(hit)pause=1500;
+      }
+      draw(); raf=requestAnimationFrame(step);};
+    raf=requestAnimationFrame(step);
+  };
+  ['tCand','tH','tBoth'].forEach(i=>$(i).addEventListener('change',draw));
+
+  // ---- タブ &amp; ステップ ----
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+    document.querySelectorAll('.pane').forEach(p=>p.style.display=p.id==='p-'+t.dataset.t?'block':'none');
+  });
+  document.querySelectorAll('.next').forEach(b=>b.onclick=()=>{
+    const steps=[...document.querySelectorAll(`.steps[data-g=&quot;${b.dataset.g}&quot;] .step`)];
+    const n=steps.find(s=>!s.classList.contains('show'));
+    if(!n){ steps.forEach((s,i)=>s.classList.toggle('show',i===0)); b.textContent='次のステップ ▶'; return; }
+    n.classList.add('show');
+    if(n.classList.contains('ans'))tween(315);
+    if(n.classList.contains('ans2'))tween(225);
+    if(steps.every(s=>s.classList.contains('show'))) b.textContent='最初から ↺';
+  });
+
+  // ---- 入力：数値のみ（全角数字も半角に変換） ----
+  ['q1','q2','q3','q4','q5','q6'].forEach(id=>{
+    const el=$(id);
+    el.addEventListener('input',()=>{
+      const v=el.value
+        .replace(/[０-９．]/g,ch=>String.fromCharCode(ch.charCodeAt(0)-0xFEE0))
+        .replace(/。/g,'.')
+        .replace(/[^\d.]/g,'')
+        .replace(/(\..*)\./g,'$1');
+      if(v!==el.value) el.value=v;
+    });
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter') $('check').click(); });
+  });
+
+  // ---- 答え合わせ（解1・解2の順番は入れ替わってもOK） ----
+  $('check').onclick=()=>{
+    const num=id=>parseFloat($(id).value);
+    const ok=(v,t,tol)=>Math.abs(v-t)<=tol;
+    const match=(i,j,k,s)=>ok(num(i),s.x,0.05)&amp;&amp;ok(num(j),s.A,0.5)&amp;&amp;ok(num(k),s.B,0.5);
+    const r1=match('q1','q2','q3',SOL[0])||match('q1','q2','q3',SOL[1]);
+    const r2=match('q4','q5','q6',SOL[0])||match('q4','q5','q6',SOL[1]);
+    const same=r1&amp;&amp;r2&amp;&amp;Math.abs(num('q1')-num('q4'))<0.1;
+    $('r1').textContent=r1?'⭕ 正解':'❌'; $('r1').style.color=r1?'#059669':'#dc2626';
+    $('r2').textContent=r2&amp;&amp;!same?'⭕ 正解':(same?'❌ 解1と同じ':'❌'); $('r2').style.color=r2&amp;&amp;!same?'#059669':'#dc2626';
+    if(r1&amp;&amp;r2&amp;&amp;!same){ $('tBoth').checked=true; draw(); }
+  };
+
+  draw();
+})();
+</script>
+</body>
+</html>
+"></iframe>
+
+  <div class="pager">
+    <button id="prev">◀ 前へ</button>
+    <button id="next">次へ ▶</button>
+  </div>
+
+<script>
+(() => {
+  const frames=[...document.querySelectorAll('iframe')];
+  const btns=[...document.querySelectorAll('#nav button')];
+  let cur=0;
+
+  function fit(f){
+    try{
+      const d=f.contentDocument; if(!d||!d.body) return;
+      f.style.height=(d.documentElement.scrollHeight+4)+'px';
+    }catch(e){ f.style.height='1500px'; }
+  }
+  frames.forEach(f=>{
+    f.addEventListener('load',()=>{
+      fit(f);
+      try{ new ResizeObserver(()=>fit(f)).observe(f.contentDocument.body); }catch(e){}
+    });
+  });
+
+  function show(i){
+    cur=Math.max(0,Math.min(frames.length-1,i));
+    frames.forEach((f,k)=>f.classList.toggle('on',k===cur));
+    btns.forEach((b,k)=>b.classList.toggle('on',k===cur));
+    document.getElementById('prev').disabled=cur===0;
+    document.getElementById('next').disabled=cur===frames.length-1;
+    history.replaceState(null,'','#'+(cur+1));
+    setTimeout(()=>fit(frames[cur]),50);
+    window.scrollTo({top:0});
+  }
+  btns.forEach(b=>b.onclick=()=>show(+b.dataset.i));
+  document.getElementById('prev').onclick=()=>show(cur-1);
+  document.getElementById('next').onclick=()=>show(cur+1);
+  window.addEventListener('resize',()=>fit(frames[cur]));
+
+  const h=parseInt(location.hash.slice(1),10);
+  show(h>=1&&h<=frames.length ? h-1 : 0);
+})();
+</script>
+</body>
+</html>
