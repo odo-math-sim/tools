@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>正弦定理と余弦定理の応用（p.159～160）V5</title>
+<title>正弦定理と余弦定理の応用（p.159～160）V6</title>
 <style>
   *{box-sizing:border-box}
   body{margin:0;background:#e2e8f0;color:#1e293b;
@@ -850,7 +850,7 @@
         <button class=&quot;btn3&quot; id=&quot;reset&quot;>はじめから</button>
       </div>
       <div class=&quot;toggles hidden&quot; id=&quot;cmpToggles&quot;>
-        <label><input type=&quot;checkbox&quot; id=&quot;tBoth&quot;> 見つけた2つの三角形を重ねて表示</label>
+        <label><input type=&quot;checkbox&quot; id=&quot;tBoth&quot;> 見つけた三角形を重ねて表示</label>
         <label><input type=&quot;checkbox&quot; id=&quot;tH&quot;> 点 C からの垂線（高さ）を表示</label>
       </div>
     </section>
@@ -992,8 +992,8 @@
 
     if($('tBoth').checked &amp;&amp; checked){
       SOL.forEach(s=>{const P={x:s.x,y:0};tri(P,s.bg);line(Cp,P,s.col,2,[4,4]);line(Bp,P,s.col,2,[4,4]);});
-    } else if(si>=0){
-      tri(A, checked ? SOL[si].bg : 'rgba(79,70,229,.10)');
+    } else if(si>=0 &amp;&amp; checked){
+      tri(A, SOL[si].bg);
     }
 
     line(Bp,Cp,'#2563eb',4); line(Cp,A,'#dc2626',4); line(Bp,A,'#16a34a',4);
@@ -1002,7 +1002,7 @@
     const aStart = -Math.atan2(A.y,A.x), aEnd = -Math.PI/4;
     const ccw = ((aEnd - aStart + Math.PI*4) % (Math.PI*2)) > Math.PI;
     ctx.beginPath();ctx.arc(X(0),Y(0),38,aStart,aEnd,ccw);
-    ctx.strokeStyle=si>=0?'#4f46e5':'#94a3b8';ctx.lineWidth=2;ctx.stroke();
+    ctx.strokeStyle=(si>=0&amp;&amp;checked)?SOL[si].col:'#94a3b8';ctx.lineWidth=2;ctx.stroke();
 
     dot(Bp,'#1e293b',6); dot(Cp,'#1e293b',6);
     ctx.beginPath();ctx.arc(X(A.x),Y(A.y),14,0,7);ctx.fillStyle='rgba(220,38,38,.18)';ctx.fill();
@@ -1044,9 +1044,22 @@
 
   const predVal = () => { const b=document.querySelector('#pred button.on'); return b?+b.dataset.v:null; };
   document.querySelectorAll('#pred button').forEach(b=>b.onclick=()=>{
-    if(checked) return;
     document.querySelectorAll('#pred button').forEach(x=>x.classList.toggle('on',x===b));
     $('checkBtn').disabled = false;
+    if(checked){
+      checked = false;
+      const f1=$('f1'), f2=$('f2');
+      f1.className='found';
+      f1.innerHTML='🔒 上の STEP 1 で個数を予想して「答え合わせ」を押すと，ここに結果が表示されます';
+      f1.onclick=null;
+      f2.className='found hidden';
+      f2.innerHTML='';
+      f2.onclick=null;
+      ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.add('hidden'));
+      $('tBoth').checked = false;
+      $('tH').checked = false;
+      draw();
+    }
   });
 
   // ---- 答え合わせボタン ----
@@ -1066,11 +1079,10 @@
     f2.onclick=()=>{ $('tBoth').checked=false; slider.value=240; draw(); };
 
     ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.remove('hidden'));
-    $('predResult').textContent = p===2 ? '⭕ 予想どおり！ 条件を満たす三角形は 2つ できました！'
-      : `予想は「${p===3?'3個以上':p+'個'}」でしたが… 実は 2つ できます！`;
+    $('predResult').textContent = p===2 ? '⭕ 予想どおり！ 条件を満たす三角形は 2つ できました！（点を ①・② に動かして確かめよう）'
+      : `予想は「${p===3?'3個以上':p+'個'}」でしたが… 実は 2つ できます！（点を ①・② に動かして確かめよう）`;
     $('predResult').style.color = p===2 ? '#059669' : '#ea580c';
-    $('tBoth').checked = true;
-    slider.value = 300;
+    $('tBoth').checked = false;
     draw();
   };
 
@@ -1116,7 +1128,13 @@
   const up=()=>{dragging=false;cv.classList.remove('drag');};
   cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
   slider.addEventListener('input',()=>setDeg(+slider.value));
-  ['tBoth','tH'].forEach(i=>$(i).addEventListener('change',draw));
+  $('tBoth').addEventListener('change',()=>{
+    if($('tBoth').checked &amp;&amp; checked &amp;&amp; !SOL.some(s=>Math.abs(+slider.value-s.deg)<SNAP)){
+      slider.value = SOL[0].deg;
+    }
+    draw();
+  });
+  $('tH').addEventListener('change',draw);
 
   // ---- ステップ ----
   document.querySelectorAll('.next').forEach(b=>b.onclick=()=>{
@@ -1646,7 +1664,7 @@
         <button class=&quot;btn3&quot; id=&quot;reset&quot;>はじめから</button>
       </div>
       <div class=&quot;toggles hidden&quot; id=&quot;cmpToggles&quot;>
-        <label><input type=&quot;checkbox&quot; id=&quot;tBoth&quot;> 見つけた2つの三角形を重ねて表示</label>
+        <label><input type=&quot;checkbox&quot; id=&quot;tBoth&quot;> 見つけた三角形を重ねて表示</label>
         <label><input type=&quot;checkbox&quot; id=&quot;tH&quot;> 点 A からの垂線（高さ）を表示</label>
       </div>
     </section>
@@ -1777,8 +1795,8 @@
 
     if($('tBoth').checked &amp;&amp; checked){
       SOL.forEach(s=>{const P={x:s.x,y:0};tri(P,s.bg);line(Ap,P,s.col,2,[4,4]);line(Cp,P,s.col,2,[4,4]);});
-    } else if(si>=0){
-      tri(B, checked ? SOL[si].bg : 'rgba(79,70,229,.10)');
+    } else if(si>=0 &amp;&amp; checked){
+      tri(B, SOL[si].bg);
     }
 
     line(Cp,Ap,'#2563eb',4); line(Ap,B,'#dc2626',4); line(Cp,B,'#16a34a',4);
@@ -1786,7 +1804,7 @@
     const aStart = -Math.atan2(B.y,B.x), aEnd = -Math.PI/6;
     const ccw = ((aEnd - aStart + Math.PI*4) % (Math.PI*2)) > Math.PI;
     ctx.beginPath();ctx.arc(X(0),Y(0),40,aStart,aEnd,ccw);
-    ctx.strokeStyle=si>=0?'#4f46e5':'#94a3b8';ctx.lineWidth=2;ctx.stroke();
+    ctx.strokeStyle=(si>=0&amp;&amp;checked)?SOL[si].col:'#94a3b8';ctx.lineWidth=2;ctx.stroke();
 
     dot(Cp,'#1e293b',6); dot(Ap,'#1e293b',6);
     ctx.beginPath();ctx.arc(X(B.x),Y(B.y),14,0,7);ctx.fillStyle='rgba(220,38,38,.18)';ctx.fill();
@@ -1828,9 +1846,22 @@
 
   const predVal = () => { const b=document.querySelector('#pred button.on'); return b?+b.dataset.v:null; };
   document.querySelectorAll('#pred button').forEach(b=>b.onclick=()=>{
-    if(checked) return;
     document.querySelectorAll('#pred button').forEach(x=>x.classList.toggle('on',x===b));
     $('checkBtn').disabled = false;
+    if(checked){
+      checked = false;
+      const f1=$('f1'), f2=$('f2');
+      f1.className='found';
+      f1.innerHTML='🔒 上の STEP 1 で個数を予想して「答え合わせ」を押すと，ここに結果が表示されます';
+      f1.onclick=null;
+      f2.className='found hidden';
+      f2.innerHTML='';
+      f2.onclick=null;
+      ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.add('hidden'));
+      $('tBoth').checked = false;
+      $('tH').checked = false;
+      draw();
+    }
   });
 
   // ---- 答え合わせボタン ----
@@ -1850,11 +1881,10 @@
     f2.onclick=()=>{ $('tBoth').checked=false; slider.value=225; draw(); };
 
     ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.remove('hidden'));
-    $('predResult').textContent = p===2 ? '⭕ 予想どおり！ 条件を満たす三角形は 2つ できました！'
-      : `予想は「${p===3?'3個以上':p+'個'}」でしたが… 実は 2つ できます！`;
+    $('predResult').textContent = p===2 ? '⭕ 予想どおり！ 条件を満たす三角形は 2つ できました！（点を ①・② に動かして確かめよう）'
+      : `予想は「${p===3?'3個以上':p+'個'}」でしたが… 実は 2つ できます！（点を ①・② に動かして確かめよう）`;
     $('predResult').style.color = p===2 ? '#059669' : '#ea580c';
-    $('tBoth').checked = true;
-    slider.value = 315;
+    $('tBoth').checked = false;
     draw();
   };
 
@@ -1898,7 +1928,13 @@
   const up=()=>{dragging=false;cv.classList.remove('drag');};
   cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
   slider.addEventListener('input',()=>setDeg(+slider.value));
-  ['tBoth','tH'].forEach(i=>$(i).addEventListener('change',draw));
+  $('tBoth').addEventListener('change',()=>{
+    if($('tBoth').checked &amp;&amp; checked &amp;&amp; !SOL.some(s=>Math.abs(+slider.value-s.deg)<SNAP)){
+      slider.value = SOL[0].deg;
+    }
+    draw();
+  });
+  $('tH').addEventListener('change',draw);
 
   document.querySelectorAll('.next').forEach(b=>b.onclick=()=>{
     const steps=[...document.querySelectorAll(`.steps[data-g=&quot;${b.dataset.g}&quot;] .step`)];
