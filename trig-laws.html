@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>正弦定理と余弦定理の応用（p.159～160）V6</title>
+<title>正弦定理と余弦定理の応用（p.159～160）V7</title>
 <style>
   *{box-sizing:border-box}
   body{margin:0;background:#e2e8f0;color:#1e293b;
@@ -849,8 +849,8 @@
         <button class=&quot;btn5&quot; id=&quot;hintBtn&quot;>💡 ヒント（1/3）</button>
         <button class=&quot;btn3&quot; id=&quot;reset&quot;>はじめから</button>
       </div>
-      <div class=&quot;toggles hidden&quot; id=&quot;cmpToggles&quot;>
-        <label><input type=&quot;checkbox&quot; id=&quot;tBoth&quot;> 見つけた三角形を重ねて表示</label>
+      <div class=&quot;toggles&quot; id=&quot;cmpToggles&quot;>
+        <label class=&quot;hidden&quot; id=&quot;tBothWrap&quot;><input type=&quot;checkbox&quot; id=&quot;tBoth&quot;> 見つけた三角形を重ねて表示</label>
         <label><input type=&quot;checkbox&quot; id=&quot;tH&quot;> 点 C からの垂線（高さ）を表示</label>
       </div>
     </section>
@@ -976,8 +976,8 @@
       ctx.beginPath();ctx.setLineDash([6,6]);ctx.arc(X(Cp.x),Y(Cp.y),RB*S,0,7);
       ctx.strokeStyle='#f87171';ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);
     }
-    // 垂線（ヒント3 または比較時）
-    if(hintLv>=3 || $('tH').checked){
+    // 垂線（チェックボックスで常に切り替え可能。ヒント3で自動的にONになる）
+    if($('tH').checked){
       line(Cp,{x:R3,y:0},'#ea580c',2,[3,4]);
       ctx.strokeStyle='#ea580c';ctx.lineWidth=1.5;ctx.strokeRect(X(R3),Y(0)-12,12,12);
       text('h = √3',X(R3)+8,Y(R3/2),'#ea580c',16,true);
@@ -991,7 +991,13 @@
     }
 
     if($('tBoth').checked &amp;&amp; checked){
-      SOL.forEach(s=>{const P={x:s.x,y:0};tri(P,s.bg);line(Cp,P,s.col,2,[4,4]);line(Bp,P,s.col,2,[4,4]);});
+      const OVF=['rgba(79,70,229,.20)','rgba(5,150,105,.38)'];
+      SOL.forEach((s,i)=>tri({x:s.x,y:0},OVF[i]));
+      SOL.forEach((s,i)=>{const P={x:s.x,y:0};line(Cp,P,s.col,3.5);line(Bp,P,s.col,3.5);
+        const gx=X((Bp.x+Cp.x+P.x)/3)-10, gy=Y((Bp.y+Cp.y+P.y)/3)+8;
+        ctx.font='bold 22px &quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,Meiryo,sans-serif';
+        ctx.lineWidth=5;ctx.strokeStyle='#fff';ctx.lineJoin='round';ctx.strokeText(i===0?'①':'②',gx,gy);
+        ctx.fillStyle=s.col;ctx.fillText(i===0?'①':'②',gx,gy);});
     } else if(si>=0 &amp;&amp; checked){
       tri(A, SOL[si].bg);
     }
@@ -1055,9 +1061,8 @@
       f2.className='found hidden';
       f2.innerHTML='';
       f2.onclick=null;
-      ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.add('hidden'));
+      ['cmp','calc','tBothWrap'].forEach(id=>$(id).classList.add('hidden'));
       $('tBoth').checked = false;
-      $('tH').checked = false;
       draw();
     }
   });
@@ -1078,7 +1083,7 @@
     f2.innerHTML=`<b>三角形 ②</b>　c = √3 − 1（≈ 0.73），A = 120°，C = 15°（鈍角三角形）<small style=&quot;float:right;color:var(--p2)&quot;>▶ 図で見る</small>`;
     f2.onclick=()=>{ $('tBoth').checked=false; slider.value=240; draw(); };
 
-    ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.remove('hidden'));
+    ['cmp','calc','tBothWrap'].forEach(id=>$(id).classList.remove('hidden'));
     $('predResult').textContent = p===2 ? '⭕ 予想どおり！ 条件を満たす三角形は 2つ できました！（点を ①・② に動かして確かめよう）'
       : `予想は「${p===3?'3個以上':p+'個'}」でしたが… 実は 2つ できます！（点を ①・② に動かして確かめよう）`;
     $('predResult').style.color = p===2 ? '#059669' : '#ea580c';
@@ -1099,6 +1104,7 @@
     $('hintArea').appendChild(d);
     $('hintBtn').textContent = hintLv<3 ? `💡 ヒント（${hintLv+1}/3）` : '💡 ヒントはここまで';
     $('hintBtn').disabled = hintLv>=3;
+    if(hintLv>=3) $('tH').checked = true;
     draw();
   };
 
@@ -1155,7 +1161,7 @@
     $('f2').className='found hidden'; $('f2').onclick=null;
     $('checkBtn').disabled=true;
     $('hintArea').innerHTML=''; $('hintBtn').disabled=false; $('hintBtn').textContent='💡 ヒント（1/3）';
-    ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.add('hidden'));
+    ['cmp','calc','tBothWrap'].forEach(id=>$(id).classList.add('hidden'));
     ['tBoth','tH'].forEach(i=>$(i).checked=false);
     document.querySelectorAll('#pred button').forEach(x=>x.classList.remove('on'));
     document.querySelectorAll('.steps .step').forEach(s=>s.classList.toggle('show',s===s.parentNode.firstElementChild));
@@ -1663,8 +1669,8 @@
         <button class=&quot;btn5&quot; id=&quot;hintBtn&quot;>💡 ヒント（1/3）</button>
         <button class=&quot;btn3&quot; id=&quot;reset&quot;>はじめから</button>
       </div>
-      <div class=&quot;toggles hidden&quot; id=&quot;cmpToggles&quot;>
-        <label><input type=&quot;checkbox&quot; id=&quot;tBoth&quot;> 見つけた三角形を重ねて表示</label>
+      <div class=&quot;toggles&quot; id=&quot;cmpToggles&quot;>
+        <label class=&quot;hidden&quot; id=&quot;tBothWrap&quot;><input type=&quot;checkbox&quot; id=&quot;tBoth&quot;> 見つけた三角形を重ねて表示</label>
         <label><input type=&quot;checkbox&quot; id=&quot;tH&quot;> 点 A からの垂線（高さ）を表示</label>
       </div>
     </section>
@@ -1781,7 +1787,7 @@
       ctx.beginPath();ctx.setLineDash([6,6]);ctx.arc(X(Ap.x),Y(Ap.y),RC*S,0,7);
       ctx.strokeStyle='#f87171';ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);
     }
-    if(hintLv>=3 || $('tH').checked){
+    if($('tH').checked){
       line(Ap,{x:R3,y:0},'#ea580c',2,[3,4]);
       ctx.strokeStyle='#ea580c';ctx.lineWidth=1.5;ctx.strokeRect(X(R3),Y(0)-12,12,12);
       text('h = 1',X(R3)+8,Y(0.5),'#ea580c',16,true);
@@ -1794,7 +1800,13 @@
     }
 
     if($('tBoth').checked &amp;&amp; checked){
-      SOL.forEach(s=>{const P={x:s.x,y:0};tri(P,s.bg);line(Ap,P,s.col,2,[4,4]);line(Cp,P,s.col,2,[4,4]);});
+      const OVF=['rgba(79,70,229,.20)','rgba(5,150,105,.38)'];
+      SOL.forEach((s,i)=>tri({x:s.x,y:0},OVF[i]));
+      SOL.forEach((s,i)=>{const P={x:s.x,y:0};line(Ap,P,s.col,3.5);line(Cp,P,s.col,3.5);
+        const gx=X((Cp.x+Ap.x+P.x)/3)-10, gy=Y((Cp.y+Ap.y+P.y)/3)+8;
+        ctx.font='bold 22px &quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,Meiryo,sans-serif';
+        ctx.lineWidth=5;ctx.strokeStyle='#fff';ctx.lineJoin='round';ctx.strokeText(i===0?'①':'②',gx,gy);
+        ctx.fillStyle=s.col;ctx.fillText(i===0?'①':'②',gx,gy);});
     } else if(si>=0 &amp;&amp; checked){
       tri(B, SOL[si].bg);
     }
@@ -1857,9 +1869,8 @@
       f2.className='found hidden';
       f2.innerHTML='';
       f2.onclick=null;
-      ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.add('hidden'));
+      ['cmp','calc','tBothWrap'].forEach(id=>$(id).classList.add('hidden'));
       $('tBoth').checked = false;
-      $('tH').checked = false;
       draw();
     }
   });
@@ -1880,7 +1891,7 @@
     f2.innerHTML=`<b>三角形 ②</b>　a = √3 − 1（≈ 0.73），A = 15°，B = 135°<small style=&quot;float:right;color:var(--p2)&quot;>▶ 図で見る</small>`;
     f2.onclick=()=>{ $('tBoth').checked=false; slider.value=225; draw(); };
 
-    ['cmp','calc','cmpToggles'].forEach(id=>$(id).classList.remove('hidden'));
+    ['cmp','calc','tBothWrap'].forEach(id=>$(id).classList.remove('hidden'));
     $('predResult').textContent = p===2 ? '⭕ 予想どおり！ 条件を満たす三角形は 2つ できました！（点を ①・② に動かして確かめよう）'
       : `予想は「${p===3?'3個以上':p+'個'}」でしたが… 実は 2つ できます！（点を ①・② に動かして確かめよう）`;
     $('predResult').style.color = p===2 ? '#059669' : '#ea580c';
@@ -1900,6 +1911,7 @@
     $('hintArea').appendChild(d);
     $('hintBtn').textContent = hintLv<3 ? `💡 ヒント（${hintLv+1}/3）` : '💡 ヒントはここまで';
     $('hintBtn').disabled = hintLv>=3;
+    if(hintLv>=3) $('tH').checked = true;
     draw();
   };
 
