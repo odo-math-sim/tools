@@ -2831,7 +2831,7 @@
     line({x:-1.6, y:0}, {x:0, y:0}, '#cbd5e1', 2, [4,4]);
     line({x:0, y:0}, {x:4.8, y:0}, '#64748b', 2.5, [6,5]);
     text(`角 ${m.vOrigin} = ${m.angleDeg}° の方向（条件を満たす側 x > 0）`, X(1.6), Y(0)+48, '#475569', 14, true);
-    text('反対側（不適）', X(-1.45), Y(0)+48, '#94a3b8', 13, true);
+    if(cType !== 3) text('反対側（不適）', X(-1.45), Y(0)+48, '#94a3b8', 13, true);
 
     // 垂線 h（常時オレンジ点線で表示）
     line(Ptop, {x:m.xH, y:0}, '#ea580c', 2.5, [4,4]);
@@ -2895,7 +2895,7 @@
       // 左側の不適な交点
       line(Ptop, P2, '#94a3b8', 2, [4,4]);
       dot(P2, '#94a3b8', 6);
-      text(Math.abs(P2.x)<0.02 ? `× 頂点${m.vOrigin}と一致（不適）` : '× 反対側（不適）', X(P2.x)-48, Y(0)+26, '#64748b', 14, true);
+      text(Math.abs(P2.x)<0.02 ? `× 頂点${m.vOrigin}と一致（不適）` : '× 反対側（不適）', X(P2.x)-60, Y(0)-14, '#64748b', 14, true);
     }
 
     // 固定された隣辺（青）と角のアーク
@@ -2910,7 +2910,7 @@
     dot(Ptop, '#1e293b', 6.5);
     text(m.vOrigin, X(0)-24, Y(0)+22, '#1e293b', 21, true);
     text(m.vTop, X(Ptop.x)-8, Y(Ptop.y)-14, '#1e293b', 21, true);
-    text(`${m.adjName} = ${m.adjDisp.split(' ')[0]}`, X(Ptop.x/2)-72, Y(Ptop.y/2)-8, '#2563eb', 16, true);
+    text(`隣辺 ${m.adjName} = ${m.adjDisp.split(' ')[0]}`, X(Ptop.x/2)-105, Y(Ptop.y/2)-8, '#2563eb', 16, true);
 
     updateUI(r, cType);
   }
