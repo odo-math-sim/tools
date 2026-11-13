@@ -3,19 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>正弦定理と余弦定理の応用（p.159～160）V7</title>
+<title>正弦定理と余弦定理の応用（p.159～160）V8</title>
 <style>
   *{box-sizing:border-box}
   body{margin:0;background:#e2e8f0;color:#1e293b;
     font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif}
   .bar{position:sticky;top:0;z-index:10;background:#1e293b;color:#fff;padding:10px 16px;box-shadow:0 2px 10px rgba(0,0,0,.25)}
-  .bar h1{margin:0 0 8px;font-size:1.15rem}
+  .bar h1{margin:0 0 8px;font-size:1.15rem;cursor:pointer;user-select:none;display:inline-block}
   .nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
   .nav button{font:inherit;font-size:.85rem;border:none;border-radius:999px;padding:6px 12px;cursor:pointer;
     background:#334155;color:#cbd5e1;font-weight:700;transition:.15s}
   .nav button:hover{background:#475569;color:#fff}
   .nav button.on{background:#facc15;color:#1e293b}
   .nav .arrow{color:#64748b}
+  .nav .secret{display:none}
+  .nav button.summary-btn{
+    border:2px solid #fbbf24;
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:#fff;
+    box-shadow:0 0 12px rgba(251,191,36,.65);
+  }
+  .nav button.summary-btn:hover{filter:brightness(1.12)}
+  .nav button.summary-btn.on{
+    background:#facc15;
+    color:#1e293b;
+    border-color:#fff;
+    box-shadow:0 0 14px rgba(250,204,21,.9);
+  }
+  .nav .pop-in{
+    display:inline-block !important;
+    animation:popUnlock .55s cubic-bezier(.18,1.4,.4,1) forwards, pulseGlow 2.2s ease-in-out infinite .55s;
+  }
+  .nav .arrow.pop-in{
+    animation:popUnlock .45s ease-out forwards;
+  }
+  @keyframes popUnlock{
+    0%{transform:scale(.3);opacity:0}
+    70%{transform:scale(1.14);opacity:1}
+    100%{transform:scale(1);opacity:1}
+  }
+  @keyframes pulseGlow{
+    0%,100%{box-shadow:0 0 10px rgba(251,191,36,.55)}
+    50%{box-shadow:0 0 20px rgba(251,191,36,.95),0 0 6px #fff}
+  }
+  .toast{
+    position:fixed;top:76px;left:50%;transform:translate(-50%,-16px);
+    z-index:100;background:linear-gradient(135deg,#1e1b4b,#312e81);color:#fff;
+    border:2px solid #facc15;border-radius:999px;padding:12px 24px;
+    font-weight:700;font-size:.98rem;box-shadow:0 10px 28px rgba(15,23,42,.35);
+    opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;
+    white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;
+  }
+  .toast.show{
+    opacity:1;transform:translate(-50%,0);
+  }
   iframe{display:none;width:100%;border:none;min-height:900px;background:#f1f5f9}
   iframe.on{display:block}
   .pager{display:flex;justify-content:space-between;gap:8px;max-width:1200px;margin:0 auto;padding:12px 16px 28px}
@@ -25,16 +66,19 @@
 </head>
 <body>
   <div class="bar">
-    <h1>📘 正弦定理と余弦定理の応用（p.159～160）</h1>
+    <h1 id="titleBar">📘 正弦定理と余弦定理の応用（p.159～160）</h1>
     <div class="nav" id="nav">
       <button data-i="0">① 例題13</button><span class="arrow">→</span>
       <button data-i="1">② 練習26</button><span class="arrow">→</span>
       <button data-i="2">③ 応用例題1（発見）</button><span class="arrow">→</span>
       <button data-i="3">④ 応用例題1（解説）</button><span class="arrow">→</span>
       <button data-i="4">⑤ 練習27（発見）</button><span class="arrow">→</span>
-      <button data-i="5">⑥ 練習27（解説）</button>
+      <button data-i="5">⑥ 練習27（解説）</button><span class="arrow secret" id="sumArrow">→</span>
+      <button data-i="6" class="secret summary-btn" id="sumBtn">🌟 ⑦ まとめ</button>
     </div>
   </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">🎉 探究クリア！『🌟 ⑦ まとめ』が出現しました！</div>
 
   <iframe title="例題13" srcdoc="<!DOCTYPE html>
 <html lang=&quot;ja&quot;>
@@ -2374,6 +2418,618 @@
 </body>
 </html>
 "></iframe>
+  <iframe title="まとめ" srcdoc="<!DOCTYPE html>
+<html lang=&quot;ja&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<title>まとめ ― 条件を満たす三角形はいくつできる？</title>
+<meta name=&quot;description&quot; content=&quot;応用例題1・練習27を振り返り、三角形の個数が決まるしくみ（図形での判断・計算での判断・4問の比較）を整理する動的教材&quot;>
+<style>
+  :root{
+    --bg:#f1f5f9; --card:#fff; --ink:#1e293b; --muted:#64748b; --line:#e2e8f0;
+    --a:#2563eb; --b:#dc2626; --c:#16a34a; --p1:#4f46e5; --p2:#059669; --warn:#ea580c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:&quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,&quot;Meiryo&quot;,system-ui,sans-serif;line-height:1.6}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px}
+  .badge{display:inline-block;margin:2px 0 6px;padding:4px 12px;border-radius:999px;
+    background:#fef3c7;color:#92400e;font-weight:700;font-size:.95rem;border:1px solid #fcd34d}
+  header h1{margin:4px 0 2px;font-size:1.5rem}
+  header p{margin:0;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:12px}
+  @media(min-width:960px){.grid{grid-template-columns:11fr 9fr}}
+  .card{background:var(--card);border-radius:16px;box-shadow:0 4px 16px rgba(15,23,42,.08);padding:16px}
+  .modes{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:10px}
+  .mode-btn{text-align:left;padding:10px 14px;border-radius:10px;border:2px solid var(--line);
+    background:#f8fafc;color:var(--ink);font:inherit;font-size:.92rem;font-weight:700;cursor:pointer;transition:.15s}
+  .mode-btn:hover{border-color:#94a3b8;filter:none}
+  .mode-btn.on{border-color:var(--p1);background:#eef2ff;color:#312e81}
+  .problem{font-size:1rem;padding:10px 14px;background:#f8fafc;border-left:5px solid var(--a);border-radius:8px;margin-bottom:10px}
+  .ca{color:var(--a);font-weight:700}.cb{color:var(--b);font-weight:700}.cc{color:var(--c);font-weight:700}.ch{color:var(--warn);font-weight:700}
+  canvas{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line);background:#fff}
+  .hint{font-size:.85rem;color:var(--muted);margin:8px 2px 0}
+  .slider-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+  .slider-row label{font-weight:700;font-size:.92rem;white-space:nowrap;color:var(--b)}
+  input[type=range]{flex:1;accent-color:var(--b)}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+  .stat{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center}
+  .stat small{display:block;color:var(--muted);font-size:.74rem}
+  .stat b{font-size:1.1rem}
+  .msg{margin-top:10px;padding:10px 12px;border-radius:10px;text-align:center;font-weight:700;display:block}
+  .msg.c0{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+  .msg.c1{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+  .msg.c2{background:#eef2ff;color:#3730a3;border:2px solid var(--p1)}
+  .msg.c3{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  button{font:inherit;border:none;border-radius:10px;padding:9px 12px;font-weight:700;cursor:pointer;color:#fff;transition:.15s;font-size:.86rem}
+  button:hover{filter:brightness(1.08)} button:active{transform:scale(.97)}
+  .btn0{background:#dc2626} .btn1{background:var(--warn)} .btn2{background:var(--p1)} .btn3{background:var(--p2)}
+  .tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+  .tab{background:#e2e8f0;color:var(--ink);padding:8px 12px;font-size:.86rem;border-radius:10px}
+  .tab.on{background:var(--ink);color:#fff}
+  .step{padding:10px 12px;border-left:4px solid var(--line);margin:8px 0;background:#f8fafc;border-radius:6px}
+  .step h3{margin:0 0 4px;font-size:.95rem}
+  .ans{border-left-color:var(--p1);background:#eef2ff}
+  .ans2{border-left-color:var(--p2);background:#ecfdf5}
+  .key{border-left-color:var(--warn);background:#fff7ed}
+  .math{font-family:&quot;Cambria Math&quot;,&quot;Times New Roman&quot;,serif;font-size:1.05rem}
+  table{width:100%;border-collapse:collapse;font-size:.88rem;margin:8px 0}
+  th,td{border:1px solid var(--line);padding:7px 6px;text-align:center;vertical-align:middle}
+  th{background:#f8fafc;font-weight:700}
+  tr.click-row{cursor:pointer;transition:.12s}
+  tr.click-row:hover{background:#f1f5f9}
+  tr.active-row{background:#eef2ff;outline:2px solid var(--p1)}
+  .tag{display:inline-block;padding:2px 8px;border-radius:999px;font-weight:700;font-size:.78rem}
+  .tag0{background:#fee2e2;color:#991b1b}
+  .tag1{background:#ffedd5;color:#9a3412}
+  .tag2{background:#e0e7ff;color:#3730a3}
+  .tag3{background:#d1fae5;color:#065f46}
+  .qbox{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px;background:#fff}
+  .qbox p{margin:0 0 6px;font-size:.9rem;font-weight:700}
+  .qbtns{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .qbtns button{background:#e2e8f0;color:var(--ink);padding:5px 12px;font-size:.82rem;border-radius:8px}
+  .qbtns button.on{background:var(--ink);color:#fff}
+  .qres{font-size:.84rem;font-weight:700;margin-top:5px;display:none}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+  <header>
+    <div class=&quot;badge&quot;>📖 教科書：p.159～160 まとめ</div>
+    <h1>まとめ ― 条件を満たす三角形はいくつできる？</h1>
+    <p>応用例題1・練習27を振り返り、三角形の個数が決まるしくみを整理しよう。</p>
+  </header>
+
+  <div class=&quot;grid&quot;>
+    <!-- 左カラム：インタラクティブ図解 -->
+    <section class=&quot;card&quot;>
+      <div class=&quot;modes&quot;>
+        <button class=&quot;mode-btn on&quot; id=&quot;modeA&quot;>🅰 応用例題1で実験（a = √6，B = 45° を固定し，向かいの辺 b を変える）</button>
+        <button class=&quot;mode-btn&quot; id=&quot;modeB&quot;>🅱 練習27で実験（b = 2，C = 30° を固定し，向かいの辺 c を変える）</button>
+      </div>
+
+      <div class=&quot;problem&quot; id=&quot;probBox&quot;>
+        固定：<span class=&quot;ca&quot;>a = √6（≈ 2.45）</span>，<b>B = 45°</b> ／ 垂線の高さ <span class=&quot;ch&quot;>h = a sin 45° = √3（≈ 1.73）</span><br>
+        スライダーで B の向かいの辺 <span class=&quot;cb&quot;>b（円の半径 r）</span> の長さを変えて，底辺との交点の数を調べよう。
+      </div>
+
+      <canvas id=&quot;cv&quot; width=&quot;800&quot; height=&quot;480&quot; aria-label=&quot;半径と垂線の長さによって三角形の個数が変化する図&quot;></canvas>
+
+      <div class=&quot;slider-row&quot;>
+        <label id=&quot;rLabel&quot; for=&quot;slider&quot;>向かいの辺 b = 2.00</label>
+        <input type=&quot;range&quot; id=&quot;slider&quot; min=&quot;0.80&quot; max=&quot;3.10&quot; step=&quot;0.01&quot; value=&quot;2.00&quot; aria-label=&quot;向かいの辺の長さ&quot;>
+      </div>
+      <p class=&quot;hint&quot;>💡 スライダーまたは下のボタンで，円の半径と垂線 h の長さの関係を比べよう（下の判定表の行をクリックしても移動できます）。</p>
+
+      <div class=&quot;stats&quot;>
+        <div class=&quot;stat&quot;><small id=&quot;stRLbl&quot;>向かいの辺 b（半径 r）</small><b id=&quot;stR&quot; style=&quot;color:var(--b)&quot;>2.00</b></div>
+        <div class=&quot;stat&quot;><small>垂線の高さ h</small><b id=&quot;stH&quot; style=&quot;color:var(--warn)&quot;>√3 ≈ 1.73</b></div>
+        <div class=&quot;stat&quot;><small id=&quot;stAdjLbl&quot;>隣辺 a</small><b id=&quot;stAdj&quot; style=&quot;color:var(--a)&quot;>√6 ≈ 2.45</b></div>
+        <div class=&quot;stat&quot;><small>三角形の個数</small><b id=&quot;stCnt&quot;>2 個</b></div>
+      </div>
+
+      <div id=&quot;msg&quot; class=&quot;msg c2&quot;></div>
+
+      <div class=&quot;row&quot;>
+        <button class=&quot;btn0&quot; id=&quot;q0&quot;>① 0個（b &amp;lt; h）</button>
+        <button class=&quot;btn1&quot; id=&quot;q1&quot;>② 1個（b = h）</button>
+        <button class=&quot;btn2&quot; id=&quot;q2&quot;>③ 2個（応用例題1：b = 2）</button>
+        <button class=&quot;btn3&quot; id=&quot;q3&quot;>④ 1個（b ≧ a）</button>
+      </div>
+    </section>
+
+    <!-- 右カラム：重要ポイントの整理 -->
+    <section class=&quot;card&quot;>
+      <div class=&quot;tabs&quot;>
+        <button class=&quot;tab on&quot; data-t=&quot;geo&quot;>① 📐 図形での判断基準</button>
+        <button class=&quot;tab&quot; data-t=&quot;alg&quot;>② ✏️ 計算での判断基準</button>
+        <button class=&quot;tab&quot; data-t=&quot;all&quot;>③ 📊 今回の問題の総まとめ</button>
+      </div>
+
+      <!-- タブ①：図形での判断基準 -->
+      <div id=&quot;p-geo&quot; class=&quot;pane&quot;>
+        <div class=&quot;step ans&quot;>
+          <h3>パターンA：2辺とその間の角がわかるとき（例題13・練習26）</h3>
+          2本の辺の長さと開き具合（間の角）が固定されるため，残りの頂点を結ぶだけで<b>必ず【1個】に決まる</b>（場合分け不要）。
+        </div>
+
+        <div class=&quot;step key&quot;>
+          <h3>パターンB：2辺と「間の角でない1角」がわかるとき（応用例題1・練習27）</h3>
+          わかっている角の<b>向かいの辺（円の半径 <span class=&quot;math&quot;>r</span>）</b>と，<b>垂線の高さ <span class=&quot;math&quot;>h = (隣辺) × sin(角)</span></b>，および<b>隣辺</b>の長さを比べることで，個数が決まる！（※角が鋭角のとき）
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>半径 <span class=&quot;math&quot;>r</span> の範囲</th>
+              <th>円と底辺（直線）の関係</th>
+              <th>三角形の個数</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class=&quot;click-row&quot; data-case=&quot;0&quot;>
+              <td><span class=&quot;math&quot;>r &amp;lt; h</span></td>
+              <td>円が底辺に届かない（交点なし）</td>
+              <td><span class=&quot;tag tag0&quot;>0 個</span></td>
+            </tr>
+            <tr class=&quot;click-row&quot; data-case=&quot;1&quot;>
+              <td><span class=&quot;math&quot;>r = h</span></td>
+              <td>円が底辺に接する（直角三角形）</td>
+              <td><span class=&quot;tag tag1&quot;>1 個</span></td>
+            </tr>
+            <tr class=&quot;click-row active-row&quot; data-case=&quot;2&quot;>
+              <td><b><span class=&quot;math&quot;>h &amp;lt; r &amp;lt; 隣辺</span></b></td>
+              <td><b>底辺の同じ側（角の右側）で2点で交わる</b><br><small style=&quot;color:var(--p1)&quot;>★ 応用例題1・練習27はココ！</small></td>
+              <td><span class=&quot;tag tag2&quot;>2 個</span></td>
+            </tr>
+            <tr class=&quot;click-row&quot; data-case=&quot;3&quot;>
+              <td><span class=&quot;math&quot;>r ≧ 隣辺</span></td>
+              <td>2点で交わるが，片方は角の反対側（不適）</td>
+              <td><span class=&quot;tag tag3&quot;>1 個</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class=&quot;hint&quot; style=&quot;margin-top:4px&quot;>👆 表の行をクリックすると，左の図がその状態に切り替わります。</p>
+
+        <div class=&quot;step&quot;>
+          <h3>💡 なぜ <span class=&quot;math&quot;>h &amp;lt; r &amp;lt; 隣辺</span> だと2個できるの？</h3>
+          ・<span class=&quot;math&quot;>h &amp;lt; r</span> なので，円が底辺の直線を突き抜けて <b>左右2つの交点</b> ができる。<br>
+          ・さらに <span class=&quot;math&quot;>r &amp;lt; 隣辺</span> なので，左側の交点も頂点（B または C）を通り越さず，<b>2点とも指定された角の側</b>に収まるため！
+        </div>
+      </div>
+
+      <!-- タブ②：計算での判断基準 -->
+      <div id=&quot;p-alg&quot; class=&quot;pane&quot; style=&quot;display:none&quot;>
+        <div class=&quot;step ans&quot;>
+          <h3>方法①：余弦定理ルート（未知の辺の2次方程式をつくる）</h3>
+          残りの辺の長さを <span class=&quot;math&quot;>x</span> として余弦定理を立てると，<span class=&quot;math&quot;>x</span> の2次方程式になる。<br>
+          辺の長さは正（<span class=&quot;math&quot;>x &amp;gt; 0</span>）なので，<b>「正の解がいくつあるか」がそのまま三角形の個数</b>になる！
+        </div>
+
+        <table>
+          <thead>
+            <tr><th>問題</th><th>余弦定理から得られる2次方程式</th><th>解と正負の判定</th><th>個数</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>応用例題1</b><br><small>a=√6, b=2, B=45°</small></td>
+              <td><span class=&quot;math&quot;>c² − 2√3 c + 2 = 0</span></td>
+              <td><span class=&quot;math&quot;>c = √3 ± 1</span><br><small>√3+1 &amp;gt; 0，√3−1 &amp;gt; 0（両方正）</small></td>
+              <td><span class=&quot;tag tag2&quot;>2 個</span></td>
+            </tr>
+            <tr>
+              <td><b>練習27</b><br><small>b=2, c=√2, C=30°</small></td>
+              <td><span class=&quot;math&quot;>a² − 2√3 a + 2 = 0</span></td>
+              <td><span class=&quot;math&quot;>a = √3 ± 1</span><br><small>√3+1 &amp;gt; 0，√3−1 &amp;gt; 0（両方正）</small></td>
+              <td><span class=&quot;tag tag2&quot;>2 個</span></td>
+            </tr>
+            <tr>
+              <td><small>参考：r ≧ 隣辺の例</small><br><small>a=√2, b=2, B=45°</small></td>
+              <td><span class=&quot;math&quot;>c² − 2c − 2 = 0</span></td>
+              <td><span class=&quot;math&quot;>c = 1 ± √3</span><br><small>1−√3 &amp;lt; 0 は不適（正の解は1つ）</small></td>
+              <td><span class=&quot;tag tag3&quot;>1 個</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class=&quot;step key&quot; style=&quot;margin-top:12px&quot;>
+          <h3>方法②：正弦定理ルート（sin から角の候補を出す）</h3>
+          <span class=&quot;math&quot;>sin A = k</span>（<span class=&quot;math&quot;>0 &amp;lt; k &amp;lt; 1</span>）を満たす角は，<b>鋭角 <span class=&quot;math&quot;>θ</span> と 鈍角 <span class=&quot;math&quot;>180° − θ</span> の2つ</b>（足して 180°）が候補になる。<br>
+          その2つの候補が両方とも三角形を作れるかは，次のどちらかでチェックする：
+          <ul style=&quot;margin:6px 0 0;padding-left:20px&quot;>
+            <li><b>内角の和チェック：</b> わかっている角と足して <b>180° 未満</b> になるか？（残りの角が正になるか）</li>
+            <li><b>辺と角の大小関係：</b> 「長い辺の向かいの角ほど大きい」に矛盾しないか？<br>
+              （例：応用例題1では <span class=&quot;math&quot;>a = √6 &amp;gt; b = 2</span> なので <span class=&quot;math&quot;>A &amp;gt; B = 45°</span>。<span class=&quot;math&quot;>A = 60°, 120°</span> はどちらも <span class=&quot;math&quot;>45°</span> より大きいので両方適する！）</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- タブ③：今回の問題の総まとめ -->
+      <div id=&quot;p-all&quot; class=&quot;pane&quot; style=&quot;display:none&quot;>
+        <p style=&quot;margin:0 0 6px;font-size:.9rem&quot;>教科書 p.159～160 で扱った4問の比較表です。</p>
+        <table>
+          <thead>
+            <tr>
+              <th>問題</th>
+              <th>与えられた条件</th>
+              <th>条件の特徴</th>
+              <th>高さ h との関係</th>
+              <th>個数と答え</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>例題13</b><br><small>p.159</small></td>
+              <td>b = 2<br>c = √3 + 1<br><b>A = 60°</b></td>
+              <td><b>2辺とその間の角</b><br><small>（A は b と c の間）</small></td>
+              <td>比較不要<br><small>（余弦定理で a が1つに決まる）</small></td>
+              <td><span class=&quot;tag tag3&quot;>1 個</span><br><small>a = √6, B = 45°, C = 75°</small></td>
+            </tr>
+            <tr>
+              <td><b>練習26</b><br><small>p.159</small></td>
+              <td>b = 2<br>c = √6 + √2<br><b>A = 45°</b></td>
+              <td><b>2辺とその間の角</b><br><small>（A は b と c の間）</small></td>
+              <td>比較不要<br><small>（余弦定理で a が1つに決まる）</small></td>
+              <td><span class=&quot;tag tag3&quot;>1 個</span><br><small>a = 2√2, B = 30°, C = 105°</small></td>
+            </tr>
+            <tr style=&quot;background:#eef2ff&quot;>
+              <td><b>応用例題1</b><br><small>p.160</small></td>
+              <td>a = √6<br><b>b = 2</b><br><b>B = 45°</b></td>
+              <td><b>間の角でない1角</b><br><small>（b は B の向かいの辺）</small></td>
+              <td><span class=&quot;math&quot;>h = √3 ≈ 1.73</span><br><b><span class=&quot;math&quot;>h &amp;lt; b &amp;lt; a</span></b></td>
+              <td><span class=&quot;tag tag2&quot;>2 個</span><br><small>① c=√3+1, A=60°, C=75°<br>② c=√3−1, A=120°, C=15°</small></td>
+            </tr>
+            <tr style=&quot;background:#eef2ff&quot;>
+              <td><b>練習27</b><br><small>p.160</small></td>
+              <td>b = 2<br><b>c = √2</b><br><b>C = 30°</b></td>
+              <td><b>間の角でない1角</b><br><small>（c は C の向かいの辺）</small></td>
+              <td><span class=&quot;math&quot;>h = 1</span><br><b><span class=&quot;math&quot;>h &amp;lt; c &amp;lt; b</span></b></td>
+              <td><span class=&quot;tag tag2&quot;>2 個</span><br><small>① a=√3+1, A=105°, B=45°<br>② a=√3−1, A=15°, B=135°</small></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class=&quot;step key&quot; style=&quot;margin-top:10px&quot;>
+          <h3>🎓 確認ミニクイズ（3問）― 何個できるか判断してみよう！</h3>
+          <div class=&quot;qbox&quot; data-ans=&quot;2&quot; data-exp=&quot;⭕ 正解！ 高さ h = a sin 30° = 4 × (1/2) = 2。h < b < a（2 < 3 < 4）なので【2個】できます。&quot;>
+            <p>Q1. △ABC において，a = 4，b = 3，B = 30° のとき，三角形はいくつできる？</p>
+            <div class=&quot;qbtns&quot;>
+              <button data-v=&quot;0&quot;>0 個</button><button data-v=&quot;1&quot;>1 個</button><button data-v=&quot;2&quot;>2 個</button>
+            </div>
+            <div class=&quot;qres&quot;></div>
+          </div>
+          <div class=&quot;qbox&quot; data-ans=&quot;0&quot; data-exp=&quot;⭕ 正解！ 高さ h = a sin 30° = 4 × (1/2) = 2。b = 1.5 < h なので円が底辺に届かず【0個】です。&quot;>
+            <p>Q2. △ABC において，a = 4，b = 1.5，B = 30° のとき，三角形はいくつできる？</p>
+            <div class=&quot;qbtns&quot;>
+              <button data-v=&quot;0&quot;>0 個</button><button data-v=&quot;1&quot;>1 個</button><button data-v=&quot;2&quot;>2 個</button>
+            </div>
+            <div class=&quot;qres&quot;></div>
+          </div>
+          <div class=&quot;qbox&quot; data-ans=&quot;1&quot; data-exp=&quot;⭕ 正解！ 2辺 b, c とその「間の角 A」が与えられているので，必ず【1個】に決まります。&quot;>
+            <p>Q3. △ABC において，b = 3，c = 5，A = 60° のとき，三角形はいくつできる？</p>
+            <div class=&quot;qbtns&quot;>
+              <button data-v=&quot;0&quot;>0 個</button><button data-v=&quot;1&quot;>1 個</button><button data-v=&quot;2&quot;>2 個</button>
+            </div>
+            <div class=&quot;qres&quot;></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>数学Ⅰ 図形と計量 ― 三角形の決定（まとめ：p.159～160）</footer>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const cv = $('cv'), ctx = cv.getContext('2d'), slider = $('slider');
+  const W = 800, H = 480;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+
+  const R3 = Math.sqrt(3), R6 = Math.sqrt(6), R2 = Math.SQRT2;
+
+  // モード定義
+  const MODES = {
+    A: {
+      id: 'A',
+      vOrigin: 'B', vTop: 'C', vMove: 'A',
+      angleDeg: 45,
+      adjName: 'a', adjDisp: '√6 ≈ 2.45', adjVal: R6,
+      oppName: 'b',
+      baseName: 'c',
+      hDisp: '√3 ≈ 1.73', hExact: '√3', hVal: R3,
+      xH: R3,
+      defaultR: 2.0,
+      defaultDisp: '2（応用例題1）',
+      q2Label: '③ 2個（応用例題1：b = 2）',
+      presets: [1.35, R3, 2.0, 2.75],
+      S: 120, OX: 220, OY: 400
+    },
+    B: {
+      id: 'B',
+      vOrigin: 'C', vTop: 'A', vMove: 'B',
+      angleDeg: 30,
+      adjName: 'b', adjDisp: '2', adjVal: 2.0,
+      oppName: 'c',
+      baseName: 'a',
+      hDisp: '1', hExact: '1', hVal: 1.0,
+      xH: R3,
+      defaultR: R2,
+      defaultDisp: '√2 ≈ 1.41（練習27）',
+      q2Label: '③ 2個（練習27：c = √2）',
+      presets: [0.75, 1.0, R2, 2.30],
+      S: 145, OX: 230, OY: 390
+    }
+  };
+
+  let curMode = MODES.A;
+
+  const X = x => curMode.OX + x * curMode.S;
+  const Y = y => curMode.OY - y * curMode.S;
+
+  function line(p,q,col,w,dash){
+    ctx.beginPath(); ctx.setLineDash(dash||[]);
+    ctx.moveTo(X(p.x),Y(p.y)); ctx.lineTo(X(q.x),Y(q.y));
+    ctx.strokeStyle=col; ctx.lineWidth=w; ctx.lineCap='round'; ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  function dot(p,col,r){
+    ctx.beginPath(); ctx.arc(X(p.x),Y(p.y),r,0,Math.PI*2);
+    ctx.fillStyle=col; ctx.fill();
+  }
+  function text(s,x,y,col,size,bold){
+    ctx.font=`${bold?'bold ':''}${size}px &quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,Meiryo,sans-serif`;
+    ctx.fillStyle=col; ctx.fillText(s,x,y);
+  }
+  function tri(P0,Ptop,Pm,fill){
+    ctx.beginPath();
+    ctx.moveTo(X(P0.x),Y(P0.y));
+    ctx.lineTo(X(Ptop.x),Y(Ptop.y));
+    ctx.lineTo(X(Pm.x),Y(Pm.y));
+    ctx.closePath();
+    ctx.fillStyle=fill; ctx.fill();
+  }
+
+  function snapRadius(r){
+    const m = curMode;
+    if(Math.abs(r - m.hVal) < 0.025) return m.hVal;
+    if(Math.abs(r - m.defaultR) < 0.025) return m.defaultR;
+    if(Math.abs(r - m.adjVal) < 0.025) return m.adjVal;
+    return r;
+  }
+
+  function classifyCase(r){
+    const m = curMode;
+    if(Math.abs(r - m.hVal) < 1e-4) return 1; // r = h (1個・接する)
+    if(r < m.hVal) return 0;                  // r < h (0個)
+    if(r < m.adjVal - 1e-4) return 2;         // h < r < 隣辺 (2個)
+    return 3;                                 // r >= 隣辺 (1個)
+  }
+
+  function draw(){
+    const m = curMode;
+    let r = snapRadius(parseFloat(slider.value));
+    slider.value = r.toFixed(2);
+    const cType = classifyCase(r);
+
+    ctx.clearRect(0,0,W,H);
+
+    // 背景グリッド
+    ctx.strokeStyle='#f1f5f9'; ctx.lineWidth=1;
+    for(let gx=m.OX%30;gx<W;gx+=30){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+    for(let gy=m.OY%30;gy<H;gy+=30){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+
+    const P0 = {x:0, y:0};
+    const Ptop = {x:m.xH, y:m.hVal};
+
+    // 底辺の直線（左側＝角の反対側は薄い点線、右側＝条件を満たす側は実線に近い点線）
+    line({x:-1.6, y:0}, {x:0, y:0}, '#cbd5e1', 2, [4,4]);
+    line({x:0, y:0}, {x:4.8, y:0}, '#64748b', 2.5, [6,5]);
+    text(`角 ${m.vOrigin} = ${m.angleDeg}° の方向（条件を満たす側 x > 0）`, X(1.6), Y(0)+48, '#475569', 14, true);
+    text('反対側（不適）', X(-1.45), Y(0)+48, '#94a3b8', 13, true);
+
+    // 垂線 h（常時オレンジ点線で表示）
+    line(Ptop, {x:m.xH, y:0}, '#ea580c', 2.5, [4,4]);
+    ctx.strokeStyle='#ea580c'; ctx.lineWidth=1.5;
+    ctx.strokeRect(X(m.xH), Y(0)-12, 12, 12);
+    if(cType !== 1) text(`h = ${m.hExact}`, X(m.xH)+10, Y(m.hVal/2)+6, '#ea580c', 16, true);
+    text('H', X(m.xH)-6, Y(0)+22, '#ea580c', 14, true);
+
+    // 半径 r の円
+    ctx.beginPath();
+    ctx.setLineDash([6,5]);
+    ctx.arc(X(Ptop.x), Y(Ptop.y), r * m.S, 0, Math.PI*2);
+    ctx.strokeStyle='rgba(220,38,38,.55)';
+    ctx.lineWidth=2;
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 交点と三角形の描画
+    if(cType === 0){
+      // 届かない場合：真下に半径 r の端点を示し、隙間を強調
+      const Pbot = {x:m.xH, y:m.hVal - r};
+      line(Ptop, Pbot, '#dc2626', 3.5);
+      dot(Pbot, '#dc2626', 6);
+      text(`${m.oppName} = ${r.toFixed(2)}`, X(m.xH)-78, Y(m.hVal - r/2), '#dc2626', 15, true);
+      text('↑ 底辺に届かない！', X(m.xH)-55, Y(0)-10, '#dc2626', 15, true);
+    } else if(cType === 1){
+      // 接する場合（1個・直角三角形）
+      const P1 = {x:m.xH, y:0};
+      tri(P0, Ptop, P1, 'rgba(234,88,12,.18)');
+      line(P0, P1, '#16a34a', 4);
+      line(Ptop, P1, '#dc2626', 4);
+      dot(P1, '#dc2626', 8);
+      text(`${m.vMove}`, X(P1.x)+12, Y(P1.y)-10, '#dc2626', 20, true);
+      text(`${m.oppName} = h = ${m.hExact}`, X(P1.x)+14, Y(m.hVal/2)+6, '#dc2626', 16, true);
+    } else if(cType === 2){
+      // 2個できる場合（h < r < 隣辺）
+      const dx = Math.sqrt(Math.max(0, r*r - m.hVal*m.hVal));
+      const P1 = {x:m.xH + dx, y:0};
+      const P2 = {x:m.xH - dx, y:0};
+      tri(P0, Ptop, P1, 'rgba(79,70,229,.20)');
+      tri(P0, Ptop, P2, 'rgba(5,150,105,.36)');
+      line(P0, P1, '#4f46e5', 3.5);
+      line(Ptop, P1, '#4f46e5', 3.5);
+      line(P0, P2, '#059669', 3.5);
+      line(Ptop, P2, '#059669', 3.5);
+      dot(P1, '#4f46e5', 8);
+      dot(P2, '#059669', 8);
+      text(`${m.vMove}₁(①)`, X(P1.x)-14, Y(0)+26, '#4f46e5', 16, true);
+      text(`${m.vMove}₂(②)`, X(P2.x)-24, Y(0)+26, '#059669', 16, true);
+    } else {
+      // r >= 隣辺（1個：右側は適する、左側は不適）
+      const dx = Math.sqrt(Math.max(0, r*r - m.hVal*m.hVal));
+      const P1 = {x:m.xH + dx, y:0};
+      const P2 = {x:m.xH - dx, y:0};
+      tri(P0, Ptop, P1, 'rgba(5,150,105,.22)');
+      line(P0, P1, '#16a34a', 4);
+      line(Ptop, P1, '#dc2626', 4);
+      dot(P1, '#059669', 8);
+      text(`${m.vMove}₁（適する）`, X(P1.x)-24, Y(0)+26, '#059669', 16, true);
+
+      // 左側の不適な交点
+      line(Ptop, P2, '#94a3b8', 2, [4,4]);
+      dot(P2, '#94a3b8', 6);
+      text(Math.abs(P2.x)<0.02 ? `× 頂点${m.vOrigin}と一致（不適）` : '× 反対側（不適）', X(P2.x)-48, Y(0)+26, '#64748b', 14, true);
+    }
+
+    // 固定された隣辺（青）と角のアーク
+    line(P0, Ptop, '#2563eb', 4.5);
+    const rad = m.angleDeg * Math.PI / 180;
+    ctx.beginPath();
+    ctx.arc(X(0), Y(0), 38, 0, -rad, true);
+    ctx.strokeStyle='#2563eb'; ctx.lineWidth=2.5; ctx.stroke();
+    text(`${m.angleDeg}°`, X(0)+44, Y(0)-10, '#1e293b', 15, true);
+
+    dot(P0, '#1e293b', 6.5);
+    dot(Ptop, '#1e293b', 6.5);
+    text(m.vOrigin, X(0)-24, Y(0)+22, '#1e293b', 21, true);
+    text(m.vTop, X(Ptop.x)-8, Y(Ptop.y)-14, '#1e293b', 21, true);
+    text(`${m.adjName} = ${m.adjDisp.split(' ')[0]}`, X(Ptop.x/2)-72, Y(Ptop.y/2)-8, '#2563eb', 16, true);
+
+    updateUI(r, cType);
+  }
+
+  function updateUI(r, cType){
+    const m = curMode;
+    const isDefault = Math.abs(r - m.defaultR) < 0.01;
+    const isH = Math.abs(r - m.hVal) < 0.01;
+    const isAdj = Math.abs(r - m.adjVal) < 0.01;
+
+    let rText = r.toFixed(2);
+    if(isDefault) rText = m.id==='A' ? '2.00（応用例題1）' : '1.41（= √2：練習27）';
+    else if(isH) rText = `${r.toFixed(2)}（= h）`;
+    else if(isAdj) rText = `${r.toFixed(2)}（= ${m.adjName}）`;
+
+    $('rLabel').textContent = `向かいの辺 ${m.oppName} = ${r.toFixed(2)}`;
+    $('stRLbl').textContent = `向かいの辺 ${m.oppName}（半径 r）`;
+    $('stR').textContent = rText;
+    $('stH').textContent = m.hDisp;
+    $('stAdjLbl').textContent = `隣辺 ${m.adjName}`;
+    $('stAdj').textContent = m.adjDisp;
+
+    const msg = $('msg');
+    if(cType === 0){
+      $('stCnt').textContent = '0 個';
+      $('stCnt').style.color = '#dc2626';
+      msg.className = 'msg c0';
+      msg.textContent = `① ${m.oppName} < h ： 0個（円が底辺に届かないため，三角形はできない）`;
+    } else if(cType === 1){
+      $('stCnt').textContent = '1 個';
+      $('stCnt').style.color = '#ea580c';
+      msg.className = 'msg c1';
+      msg.textContent = `② ${m.oppName} = h ： 1個（円が底辺に接する ＝ 直角三角形が1つだけできる）`;
+    } else if(cType === 2){
+      $('stCnt').textContent = '2 個';
+      $('stCnt').style.color = '#4f46e5';
+      msg.className = 'msg c2';
+      msg.textContent = `③ h < ${m.oppName} < ${m.adjName} ： 2個（円が底辺と2点で交わる ★応用例題1・練習27はココ！）`;
+    } else {
+      $('stCnt').textContent = '1 個';
+      $('stCnt').style.color = '#059669';
+      msg.className = 'msg c3';
+      msg.textContent = `④ ${m.oppName} ≧ ${m.adjName} ： 1個（片方の交点は角 ${m.vOrigin} の反対側になるため，条件を満たす三角形は1つ）`;
+    }
+
+    document.querySelectorAll('tr.click-row').forEach(tr => {
+      tr.classList.toggle('active-row', +tr.dataset.case === cType);
+    });
+  }
+
+  function switchMode(modeKey){
+    curMode = MODES[modeKey];
+    $('modeA').classList.toggle('on', modeKey === 'A');
+    $('modeB').classList.toggle('on', modeKey === 'B');
+    $('q0').textContent = `① 0個（${curMode.oppName} < h）`;
+    $('q1').textContent = `② 1個（${curMode.oppName} = h）`;
+    $('q2').textContent = curMode.q2Label;
+    $('q3').textContent = `④ 1個（${curMode.oppName} ≧ ${curMode.adjName}）`;
+
+    if(modeKey === 'A'){
+      $('probBox').innerHTML = `固定：<span class=&quot;ca&quot;>a = √6（≈ 2.45）</span>，<b>B = 45°</b> ／ 垂線の高さ <span class=&quot;ch&quot;>h = a sin 45° = √3（≈ 1.73）</span><br>スライダーで B の向かいの辺 <span class=&quot;cb&quot;>b（円の半径 r）</span> の長さを変えて，底辺との交点の数を調べよう。`;
+      slider.min = '0.90'; slider.max = '3.00';
+    } else {
+      $('probBox').innerHTML = `固定：<span class=&quot;ca&quot;>b = 2</span>，<b>C = 30°</b> ／ 垂線の高さ <span class=&quot;ch&quot;>h = b sin 30° = 1</span><br>スライダーで C の向かいの辺 <span class=&quot;cb&quot;>c（円の半径 r）</span> の長さを変えて，底辺との交点の数を調べよう。`;
+      slider.min = '0.50'; slider.max = '2.60';
+    }
+    slider.value = curMode.defaultR.toFixed(2);
+    draw();
+  }
+
+  $('modeA').onclick = () => switchMode('A');
+  $('modeB').onclick = () => switchMode('B');
+  slider.addEventListener('input', draw);
+
+  $('q0').onclick = () => { slider.value = curMode.presets[0]; draw(); };
+  $('q1').onclick = () => { slider.value = curMode.presets[1]; draw(); };
+  $('q2').onclick = () => { slider.value = curMode.presets[2]; draw(); };
+  $('q3').onclick = () => { slider.value = curMode.presets[3]; draw(); };
+
+  document.querySelectorAll('tr.click-row').forEach(tr => {
+    tr.onclick = () => {
+      const idx = +tr.dataset.case;
+      slider.value = curMode.presets[idx];
+      draw();
+    };
+  });
+
+  // タブ切り替え
+  document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === t));
+    ['geo','alg','all'].forEach(k => $('p-' + k).style.display = k === t.dataset.t ? 'block' : 'none');
+  });
+
+  // 確認ミニクイズ
+  document.querySelectorAll('.qbox').forEach(box => {
+    const ans = box.dataset.ans;
+    const exp = box.dataset.exp;
+    const res = box.querySelector('.qres');
+    box.querySelectorAll('button').forEach(btn => {
+      btn.onclick = () => {
+        box.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn));
+        res.style.display = 'block';
+        if(btn.dataset.v === ans){
+          res.style.color = '#059669';
+          res.textContent = exp;
+        } else {
+          res.style.color = '#dc2626';
+          res.textContent = '❌ もう一度考えてみよう！（「間の角」か「向かいの辺と高さ h」かをチェック）';
+        }
+      };
+    });
+  });
+
+  switchMode('A');
+})();
+</script>
+</body>
+</html>
+"></iframe>
 
   <div class="pager">
     <button id="prev">◀ 前へ</button>
@@ -2384,7 +3040,83 @@
 (() => {
   const frames=[...document.querySelectorAll('iframe')];
   const btns=[...document.querySelectorAll('#nav button')];
+  const done=[false,false,false,false,false,false];
+  let unlocked=false;
   let cur=0;
+  let toastTimer=null;
+
+  function maxIndex(){
+    return unlocked ? frames.length - 1 : 5;
+  }
+
+  function updatePager(){
+    document.getElementById('prev').disabled = cur === 0;
+    document.getElementById('next').disabled = cur >= maxIndex();
+  }
+
+  function showToast(){
+    const t=document.getElementById('toast');
+    t.classList.add('show');
+    if(toastTimer) clearTimeout(toastTimer);
+    toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+  }
+
+  function unlockSummary(){
+    if(unlocked) return;
+    unlocked=true;
+    document.getElementById('sumArrow').classList.add('pop-in');
+    document.getElementById('sumBtn').classList.add('pop-in');
+    updatePager();
+    showToast();
+  }
+
+  function markDone(idx){
+    if(idx<0 || idx>=6 || done[idx]) return;
+    done[idx]=true;
+    const b=btns[idx];
+    if(b && !b.textContent.startsWith('✅ ')){
+      b.textContent='✅ '+b.textContent;
+    }
+    if(done.every(Boolean)){
+      unlockSummary();
+    }
+  }
+
+  function attachActivityListeners(f, idx){
+    if(idx>=6) return true;
+    try{
+      const d=f.contentDocument;
+      if(!d || !d.body) return false;
+      const cv=d.getElementById('cv');
+      if(!cv) return false;
+      if(cv.dataset.bound==='1') return true;
+      cv.dataset.bound='1';
+
+      const scheduleDone=()=>setTimeout(()=>markDone(idx), 800);
+
+      if(idx===2 || idx===4){
+        // ③・⑤（発見編）：「答え合わせ（発見ノートを開く）」または「次のステップ」クリックから800ms後に達成
+        d.addEventListener('click', e=>{
+          if(e.target.closest && e.target.closest('#checkBtn, .next')) scheduleDone();
+        }, true);
+      } else {
+        // ①・②・④・⑥（解説・確認編）：
+        // (a) 図やスライダーを動かして #msg が正解状態（p1 または p2）になったとき
+        // (b) #check, .next, #go, #go1, #go2, #anim のいずれかを押したとき
+        const msg=d.getElementById('msg');
+        const checkMsg=()=>{
+          if(msg && (msg.classList.contains('p1') || msg.classList.contains('p2'))) scheduleDone();
+        };
+        ['input','pointermove','pointerup','change'].forEach(ev=>{
+          d.addEventListener(ev, ()=>setTimeout(checkMsg, 0), true);
+        });
+        d.addEventListener('click', e=>{
+          if(e.target.closest && e.target.closest('#check, .next, #go, #go1, #go2, #anim')) scheduleDone();
+        }, true);
+      }
+      return true;
+    }catch(e){ return false; }
+  }
 
   function fit(f){
     try{
@@ -2392,30 +3124,54 @@
       f.style.height=(d.documentElement.scrollHeight+4)+'px';
     }catch(e){ f.style.height='1500px'; }
   }
-  frames.forEach(f=>{
-    f.addEventListener('load',()=>{
+
+  frames.forEach((f, idx)=>{
+    const onReady=()=>{
       fit(f);
+      attachActivityListeners(f, idx);
       try{ new ResizeObserver(()=>fit(f)).observe(f.contentDocument.body); }catch(e){}
-    });
+    };
+    f.addEventListener('load', onReady);
+    try{
+      if(f.contentDocument && f.contentDocument.readyState==='complete') onReady();
+    }catch(e){}
   });
+  const bindTimer=setInterval(()=>{
+    if([0,1,2,3,4,5].every(i=>attachActivityListeners(frames[i], i))){
+      clearInterval(bindTimer);
+    }
+  }, 1000);
 
   function show(i){
-    cur=Math.max(0,Math.min(frames.length-1,i));
+    cur=Math.max(0,Math.min(maxIndex(),i));
     frames.forEach((f,k)=>f.classList.toggle('on',k===cur));
     btns.forEach((b,k)=>b.classList.toggle('on',k===cur));
-    document.getElementById('prev').disabled=cur===0;
-    document.getElementById('next').disabled=cur===frames.length-1;
+    updatePager();
     history.replaceState(null,'','#'+(cur+1));
-    setTimeout(()=>fit(frames[cur]),50);
+    attachActivityListeners(frames[cur], cur);
+    setTimeout(()=>{ fit(frames[cur]); attachActivityListeners(frames[cur], cur); },50);
     window.scrollTo({top:0});
   }
+
   btns.forEach(b=>b.onclick=()=>show(+b.dataset.i));
   document.getElementById('prev').onclick=()=>show(cur-1);
   document.getElementById('next').onclick=()=>show(cur+1);
   window.addEventListener('resize',()=>fit(frames[cur]));
 
+  // 先生用隠しコマンド：ヘッダータイトルを素早く3回連続クリック／タップで解放
+  let tapTimes=[];
+  document.getElementById('titleBar').addEventListener('click',()=>{
+    const now=performance.now();
+    tapTimes=tapTimes.filter(t=>now-t<900);
+    tapTimes.push(now);
+    if(tapTimes.length>=3){
+      tapTimes=[];
+      unlockSummary();
+    }
+  });
+
   const h=parseInt(location.hash.slice(1),10);
-  show(h>=1&&h<=frames.length ? h-1 : 0);
+  show(h>=1&&h<=maxIndex()+1 ? h-1 : 0);
 })();
 </script>
 </body>
