@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>正弦定理と余弦定理の応用（p.159～160）V11</title>
+<title>正弦定理と余弦定理の応用（p.159～160）V12</title>
 <style>
   *{box-sizing:border-box}
   body{margin:0;background:#e2e8f0;color:#1e293b;
@@ -1035,18 +1035,27 @@
     }
 
     if($('tBoth').checked &amp;&amp; checked){
-      const OVF=['rgba(79,70,229,.20)','rgba(5,150,105,.38)'];
-      SOL.forEach((s,i)=>tri({x:s.x,y:0},OVF[i]));
-      SOL.forEach((s,i)=>{const P={x:s.x,y:0};line(Cp,P,s.col,3.5);line(Bp,P,s.col,3.5);
-        const gx=X((Bp.x+Cp.x+P.x)/3)-10, gy=Y((Bp.y+Cp.y+P.y)/3)+8;
-        ctx.font='bold 22px &quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,Meiryo,sans-serif';
-        ctx.lineWidth=5;ctx.strokeStyle='#fff';ctx.lineJoin='round';ctx.strokeText(i===0?'①':'②',gx,gy);
-        ctx.fillStyle=s.col;ctx.fillText(i===0?'①':'②',gx,gy);});
+      const P1={x:SOL[0].x,y:0}, P2={x:SOL[1].x,y:0};
+      tri(P1,'rgba(79,70,229,.18)');
+      tri(P2,'rgba(5,150,105,.35)');
     } else if(si>=0 &amp;&amp; checked){
       tri(A, SOL[si].bg);
     }
 
     line(Bp,Cp,'#2563eb',4); line(Cp,A,'#dc2626',4); line(Bp,A,'#16a34a',4);
+
+    if($('tBoth').checked &amp;&amp; checked){
+      const P1={x:SOL[0].x,y:0}, P2={x:SOL[1].x,y:0};
+      line(Bp,Cp,'#4f46e5',5); line(Cp,P1,'#4f46e5',5); line(Bp,P1,'#4f46e5',5);
+      line(Bp,P2,'#059669',2.5); line(Cp,P2,'#059669',2.2,[6,4]);
+      SOL.forEach((s,i)=>{
+        const P={x:s.x,y:0}, lbl=i===0?'①(大)':'②(小)';
+        const gx=X((Bp.x+Cp.x+P.x)/3)+(i===0?0:-38), gy=Y((Bp.y+Cp.y+P.y)/3)+(i===0?8:14);
+        ctx.font='bold 19px &quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,Meiryo,sans-serif';
+        ctx.lineWidth=5;ctx.strokeStyle='#fff';ctx.lineJoin='round';ctx.strokeText(lbl,gx,gy);
+        ctx.fillStyle=s.col;ctx.fillText(lbl,gx,gy);
+      });
+    }
     // B の角（現在の角）
     const bNow = ang(A.x,A.y,Cp.x,Cp.y);
     const aStart = -Math.atan2(A.y,A.x), aEnd = -Math.PI/4;
@@ -1452,7 +1461,10 @@
     line({x:-0.5,y:0},{x:4.6,y:0},'#94a3b8',2,[6,6]);
     ctx.beginPath();ctx.setLineDash([6,6]);ctx.arc(X(Cp.x),Y(Cp.y),RB*S,0,7);ctx.strokeStyle='#fca5a5';ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);
 
-    if($('tBoth').checked){ SOL.forEach(s=>{const P={x:s.x,y:0};tri(P,s.bg);line(Cp,P,s.col,2,[4,4]);}); }
+    if($('tBoth').checked){
+      tri({x:SOL[0].x,y:0},'rgba(79,70,229,.18)');
+      tri({x:SOL[1].x,y:0},'rgba(5,150,105,.35)');
+    }
     else if(snapped){ tri(A, snapped.bg); }
 
     if($('tH').checked){
@@ -1466,6 +1478,11 @@
     }
 
     line(Bp,Cp,'#2563eb',4); line(Cp,A,'#dc2626',4); line(Bp,A,'#16a34a',4);
+    if($('tBoth').checked){
+      const P1={x:SOL[0].x,y:0}, P2={x:SOL[1].x,y:0};
+      line(Bp,Cp,'#4f46e5',4); line(Cp,P1,'#4f46e5',4); line(Bp,P1,'#4f46e5',4);
+      line(Bp,P2,'#059669',2.5); line(Cp,P2,'#059669',2.2,[6,4]);
+    }
     ctx.beginPath();ctx.arc(X(0),Y(0),38,0,-Math.PI/4,true);ctx.strokeStyle='#2563eb';ctx.lineWidth=2;ctx.stroke();
     text('45°',X(0)+44,Y(0)-12,'#1e293b',15);
 
@@ -1844,18 +1861,27 @@
     }
 
     if($('tBoth').checked &amp;&amp; checked){
-      const OVF=['rgba(79,70,229,.20)','rgba(5,150,105,.38)'];
-      SOL.forEach((s,i)=>tri({x:s.x,y:0},OVF[i]));
-      SOL.forEach((s,i)=>{const P={x:s.x,y:0};line(Ap,P,s.col,3.5);line(Cp,P,s.col,3.5);
-        const gx=X((Cp.x+Ap.x+P.x)/3)-10, gy=Y((Cp.y+Ap.y+P.y)/3)+8;
-        ctx.font='bold 22px &quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,Meiryo,sans-serif';
-        ctx.lineWidth=5;ctx.strokeStyle='#fff';ctx.lineJoin='round';ctx.strokeText(i===0?'①':'②',gx,gy);
-        ctx.fillStyle=s.col;ctx.fillText(i===0?'①':'②',gx,gy);});
+      const P1={x:SOL[0].x,y:0}, P2={x:SOL[1].x,y:0};
+      tri(P1,'rgba(79,70,229,.18)');
+      tri(P2,'rgba(5,150,105,.35)');
     } else if(si>=0 &amp;&amp; checked){
       tri(B, SOL[si].bg);
     }
 
     line(Cp,Ap,'#2563eb',4); line(Ap,B,'#dc2626',4); line(Cp,B,'#16a34a',4);
+
+    if($('tBoth').checked &amp;&amp; checked){
+      const P1={x:SOL[0].x,y:0}, P2={x:SOL[1].x,y:0};
+      line(Cp,Ap,'#4f46e5',5); line(Ap,P1,'#4f46e5',5); line(Cp,P1,'#4f46e5',5);
+      line(Cp,P2,'#059669',2.5); line(Ap,P2,'#059669',2.2,[6,4]);
+      SOL.forEach((s,i)=>{
+        const P={x:s.x,y:0}, lbl=i===0?'①(大)':'②(小)';
+        const gx=X((Cp.x+Ap.x+P.x)/3)+(i===0?0:-42), gy=Y((Cp.y+Ap.y+P.y)/3)+(i===0?10:15);
+        ctx.font='bold 19px &quot;Hiragino Sans&quot;,&quot;Yu Gothic UI&quot;,Meiryo,sans-serif';
+        ctx.lineWidth=5;ctx.strokeStyle='#fff';ctx.lineJoin='round';ctx.strokeText(lbl,gx,gy);
+        ctx.fillStyle=s.col;ctx.fillText(lbl,gx,gy);
+      });
+    }
     const cNow = ang(B.x,B.y,Ap.x,Ap.y);
     const aStart = -Math.atan2(B.y,B.x), aEnd = -Math.PI/6;
     const ccw = ((aEnd - aStart + Math.PI*4) % (Math.PI*2)) > Math.PI;
@@ -2256,7 +2282,10 @@
     line({x:-0.5,y:0},{x:4.4,y:0},'#94a3b8',2,[6,6]);
     ctx.beginPath();ctx.setLineDash([6,6]);ctx.arc(X(Ap.x),Y(Ap.y),RC*S,0,7);ctx.strokeStyle='#fca5a5';ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);
 
-    if($('tBoth').checked){ SOL.forEach(s=>{const P={x:s.x,y:0};tri(P,s.bg);line(Ap,P,s.col,2,[4,4]);}); }
+    if($('tBoth').checked){
+      tri({x:SOL[0].x,y:0},'rgba(79,70,229,.18)');
+      tri({x:SOL[1].x,y:0},'rgba(5,150,105,.35)');
+    }
     else if(snapped){ tri(B, snapped.bg); }
 
     if($('tH').checked){
@@ -2270,6 +2299,11 @@
     }
 
     line(Cp,Ap,'#2563eb',4); line(Ap,B,'#dc2626',4); line(Cp,B,'#16a34a',4);
+    if($('tBoth').checked){
+      const P1={x:SOL[0].x,y:0}, P2={x:SOL[1].x,y:0};
+      line(Cp,Ap,'#4f46e5',4); line(Ap,P1,'#4f46e5',4); line(Cp,P1,'#4f46e5',4);
+      line(Cp,P2,'#059669',2.5); line(Ap,P2,'#059669',2.2,[6,4]);
+    }
     ctx.beginPath();ctx.arc(X(0),Y(0),40,0,-Math.PI/6,true);ctx.strokeStyle='#2563eb';ctx.lineWidth=2;ctx.stroke();
     text('30°',X(0)+46,Y(0)-6,'#1e293b',15);
 
@@ -2877,12 +2911,13 @@
       const dx = Math.sqrt(Math.max(0, r*r - m.hVal*m.hVal));
       const P1 = {x:m.xH + dx, y:0};
       const P2 = {x:m.xH - dx, y:0};
-      tri(P0, Ptop, P1, 'rgba(79,70,229,.20)');
-      tri(P0, Ptop, P2, 'rgba(5,150,105,.36)');
-      line(P0, P1, '#4f46e5', 3.5);
-      line(Ptop, P1, '#4f46e5', 3.5);
-      line(P0, P2, '#059669', 3.5);
-      line(Ptop, P2, '#059669', 3.5);
+      tri(P0, Ptop, P1, 'rgba(79,70,229,.18)');
+      tri(P0, Ptop, P2, 'rgba(5,150,105,.35)');
+      line(P0, Ptop, '#4f46e5', 4);
+      line(P0, P1, '#4f46e5', 4);
+      line(Ptop, P1, '#4f46e5', 4);
+      line(P0, P2, '#059669', 2.5);
+      line(Ptop, P2, '#059669', 2.2, [6,4]);
       dot(P1, '#4f46e5', 8);
       dot(P2, '#059669', 8);
       text(`${m.vMove}₁(①)`, X(P1.x)-14, Y(0)+26, '#4f46e5', 16, true);
@@ -2904,8 +2939,8 @@
       text(Math.abs(P2.x)<0.02 ? `× 頂点${m.vOrigin}と一致（不適）` : '× 反対側（不適）', X(P2.x)-60, Y(0)-14, '#64748b', 14, true);
     }
 
-    // 固定された隣辺（青）と角のアーク
-    line(P0, Ptop, '#2563eb', 4.5);
+    // 固定された隣辺（cType === 2 のときは①の紫枠を維持）
+    if(cType !== 2) line(P0, Ptop, '#2563eb', 4.5);
     const rad = m.angleDeg * Math.PI / 180;
     ctx.beginPath();
     ctx.arc(X(0), Y(0), 38, 0, -rad, true);
