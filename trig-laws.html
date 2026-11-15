@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>正弦定理と余弦定理の応用（p.159～160）V16</title>
+<title>正弦定理と余弦定理の応用（p.159～160）V17</title>
 <style>
   *{box-sizing:border-box}
   body{margin:0;background:#e2e8f0;color:#1e293b;
     font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif}
-  .bar{position:sticky;top:0;z-index:10;background:#1e293b;color:#fff;padding:10px 16px;box-shadow:0 2px 10px rgba(0,0,0,.25)}
-  .bar h1{margin:0 0 8px;font-size:1.15rem;cursor:pointer;user-select:none;display:inline-block}
+  .bar{position:sticky;top:0;z-index:10;background:#1e293b;color:#fff;padding:10px 16px;box-shadow:0 2px 10px rgba(0,0,0,.25);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+  .bar h1{margin:0 0 8px;font-size:1.15rem;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;display:inline-block}
   .nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
   .nav button{font:inherit;font-size:.85rem;border:none;border-radius:999px;padding:6px 12px;cursor:pointer;
-    background:#334155;color:#cbd5e1;font-weight:700;transition:.15s}
+    background:#334155;color:#cbd5e1;font-weight:700;transition:.15s;touch-action:manipulation;user-select:none;-webkit-user-select:none}
   .nav button:hover{background:#475569;color:#fff}
   .nav button.on{background:#facc15;color:#1e293b}
   .nav .arrow{color:#64748b}
@@ -3251,7 +3251,7 @@
   let p2TapTimes=[];
   btns[1].addEventListener('click',()=>{
     const now=performance.now();
-    p2TapTimes=p2TapTimes.filter(t=>now-t<900);
+    p2TapTimes=p2TapTimes.filter(t=>now-t<1500);
     p2TapTimes.push(now);
     if(p2TapTimes.length>=3){
       p2TapTimes=[];
@@ -3264,7 +3264,7 @@
   document.getElementById('titleBar').addEventListener('click',()=>{
     if(!part2Unlocked) return;
     const now=performance.now();
-    tapTimes=tapTimes.filter(t=>now-t<900);
+    tapTimes=tapTimes.filter(t=>now-t<1500);
     tapTimes.push(now);
     if(tapTimes.length>=3){
       tapTimes=[];
