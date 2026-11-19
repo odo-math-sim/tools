@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>正弦定理と余弦定理の応用（p.159～160）V18</title>
+<title>正弦定理と余弦定理の応用（p.159～160）V19</title>
 <style>
   *{box-sizing:border-box}
   body{margin:0;background:#e2e8f0;color:#1e293b;
     font-family:"Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif}
   .bar{position:sticky;top:0;z-index:10;background:#1e293b;color:#fff;padding:10px 16px;box-shadow:0 2px 10px rgba(0,0,0,.25);touch-action:manipulation;user-select:none;-webkit-user-select:none}
-  .bar h1{margin:0 0 8px;font-size:1.15rem;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;display:inline-block}
+  .bar h1{margin:0 0 8px;font-size:1.15rem;user-select:none;-webkit-user-select:none;touch-action:manipulation;display:inline-block}
   .nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
   .nav button{font:inherit;font-size:.85rem;border:none;border-radius:999px;padding:6px 12px;cursor:pointer;
     background:#334155;color:#cbd5e1;font-weight:700;transition:.15s;touch-action:manipulation;user-select:none;-webkit-user-select:none}
@@ -73,8 +73,8 @@
       <button data-i="2">③ 応用例題1（発見）</button><span class="arrow">→</span>
       <button data-i="3">④ 応用例題1（解説）</button><span class="arrow">→</span>
       <button data-i="4">⑤ 練習27（発見）</button><span class="arrow">→</span>
-      <button data-i="5">⑥ 練習27（解説）</button><span class="arrow secret" id="sumArrow">→</span>
-      <button data-i="6" class="secret summary-btn" id="sumBtn">🌟 ⑦ まとめ</button>
+      <button data-i="5">⑥ 練習27（解説）</button><span class="arrow" id="sumArrow">→</span>
+      <button data-i="6" class="summary-btn" id="sumBtn">🌟 ⑦ まとめ</button>
     </div>
   </div>
 
@@ -3111,7 +3111,7 @@
   const btns=[...document.querySelectorAll('#nav button')];
   const done=[false,false,false,false,false,false];
   let part2Unlocked=true;
-  let unlocked=false;
+  let unlocked=true;
   let cur=0;
   let toastTimer=null;
 
@@ -3132,31 +3132,12 @@
     toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
   }
 
-  function unlockSummary(isSecret=false){
-    if(!part2Unlocked) return;
-    const msg = isSecret
-      ? '✨ ナイス！よく見つけましたね！『🌟 ⑦ まとめ』が出現しました！'
-      : '🎉 探究クリア！『🌟 ⑦ まとめ』が出現しました！';
-    if(unlocked){
-      if(isSecret) showToast(msg);
-      return;
-    }
-    unlocked=true;
-    document.getElementById('sumArrow').classList.add('pop-in');
-    document.getElementById('sumBtn').classList.add('pop-in');
-    updatePager();
-    showToast(msg);
-  }
-
   function markDone(idx){
     if(idx<0 || idx>=6 || done[idx]) return;
     done[idx]=true;
     const b=btns[idx];
     if(b && !b.textContent.startsWith('✅ ')){
       b.textContent='✅ '+b.textContent;
-    }
-    if(done.every(Boolean)){
-      unlockSummary(false);
     }
   }
 
@@ -3235,19 +3216,6 @@
   document.getElementById('prev').onclick=()=>show(cur-1);
   document.getElementById('next').onclick=()=>show(cur+1);
   window.addEventListener('resize',()=>fit(frames[cur]));
-
-  // 先生用隠しコマンド：ヘッダータイトルを素早く3回連続クリック／タップで解放
-  let tapTimes=[];
-  document.getElementById('titleBar').addEventListener('click',()=>{
-    if(!part2Unlocked) return;
-    const now=performance.now();
-    tapTimes=tapTimes.filter(t=>now-t<1500);
-    tapTimes.push(now);
-    if(tapTimes.length>=3){
-      tapTimes=[];
-      unlockSummary(true);
-    }
-  });
 
   const h=parseInt(location.hash.slice(1),10);
   show(h>=1&&h<=maxIndex()+1 ? h-1 : 0);
